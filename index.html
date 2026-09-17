@@ -2594,11 +2594,41 @@
       }
     ];
 
-    // LocalStorage 상태 관리
-    let userState = JSON.parse(localStorage.getItem('csts_study_state')) || {};
+    // 기본 수험 진행 상태 (9월 10일 시작 ~ 오늘 9월 17일까지 8개 항목 완료 기본값)
+    function getDefaultStudyState() {
+      return {
+        '1-1': { checked: true, minutes: 45, memo: '기본 개념 학습 완료' },
+        '1-2': { checked: true, minutes: 40, memo: '오류/결함/장애 차이 정리' },
+        '1-3': { checked: true, minutes: 40, memo: '테스트 기본 원칙 숙지' },
+        '1-4': { checked: true, minutes: 45, memo: '품질 지표 매핑 완료' },
+        '1-5': { checked: true, minutes: 50, memo: '표준 용어 암기' },
+        '1-6': { checked: true, minutes: 60, memo: '1장 연습문제 풀이 완료 (정답률 92%)' },
+        '2-1': { checked: true, minutes: 40, memo: '테스트 프로세스 개요 정리' },
+        '2-2': { checked: true, minutes: 45, memo: '정적/동적 테스트 분류 완료' }
+      };
+    }
+
+    // LocalStorage 상태 관리 (v2로 키 갱신하여 Vercel 및 새 방문자에게도 9/17 기준 진척도 자동 기본 반영)
+    const STUDY_STORAGE_KEY = 'csts_study_state_v2';
+    let userState = (function() {
+      try {
+        const saved = localStorage.getItem(STUDY_STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && Object.keys(parsed).length > 0) return parsed;
+        }
+      } catch (e) {}
+      const defaults = getDefaultStudyState();
+      try {
+        localStorage.setItem(STUDY_STORAGE_KEY, JSON.stringify(defaults));
+      } catch (e) {}
+      return defaults;
+    })();
 
     function saveState() {
-      localStorage.setItem('csts_study_state', JSON.stringify(userState));
+      try {
+        localStorage.setItem(STUDY_STORAGE_KEY, JSON.stringify(userState));
+      } catch (e) {}
       updateDashboard();
     }
 
@@ -2778,8 +2808,8 @@
     }
 
     function resetAllProgress() {
-      if (confirm('정말로 모든 공부 체크 및 학습 시간을 초기화하시겠습니까?')) {
-        userState = {};
+      if (confirm('모든 공부 체크 및 학습 시간을 기본 진행 상태(9/17 오늘 기준)로 재설정하시겠습니까?')) {
+        userState = getDefaultStudyState();
         saveState();
         renderStudyPlan();
       }
