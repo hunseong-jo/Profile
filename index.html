@@ -1911,17 +1911,17 @@
       { id: 5, date: '9월 14일', name: '킹샷:Kingshot', time: '', level: '', genre: '액션/슈팅', desc: '' },
       { id: 6, date: '9월 15일', name: '오딘: 발할라 라이징', time: '', level: '', genre: 'MMORPG', desc: '' },
       { id: 7, date: '9월 16일', name: '메이플 키우기', time: '', level: '', genre: '방치형 RPG', desc: '' },
-      { id: 8, date: '9월 17일', name: '이클립스: 더 어웨이크닝', time: '', level: '', genre: '전략 SLG', desc: 'Google Play & App Store 공동 1위 달성작' },
+      { id: 8, date: '9월 17일', name: '이클립스: 더 어웨이크닝', time: '', level: '', genre: '전략 SLG', desc: '' },
       { id: 9, date: '9월 18일', name: '로블록스 (Roblox)', time: '', level: '', genre: '샌드박스/메타버스', desc: '' },
       { id: 10, date: '9월 19일', name: '가십하버: 합성 & 스토리 게임', time: '', level: '', genre: '머지(합성) 퍼즐', desc: '' },
       { id: 11, date: '9월 20일', name: '로얄 매치 Royal Match', time: '', level: '', genre: '매치3 퍼즐', desc: '' },
-      { id: 12, date: '9월 21일', name: '운빨존많겜', time: '', level: '', genre: '협동 타워 디펜스', desc: '인기 순위 15위 ➔ 11위 역주행 기록' },
+      { id: 12, date: '9월 21일', name: '운빨존많겜', time: '', level: '', genre: '협동 타워 디펜스', desc: '' },
       { id: 13, date: '9월 22일', name: '라스트 워: 서바이벌', time: '', level: '', genre: '전략/캐주얼 슈팅', desc: '' },
       { id: 14, date: '9월 23일', name: '열혈강호: 넥스트', time: '', level: '', genre: '무협 MMORPG', desc: '' }
     ];
 
     // LocalStorage 연동
-    const STORAGE_KEY = 'user_game_history_prof_v2';
+    const STORAGE_KEY = 'user_game_history_prof_v3';
     let games = JSON.parse(localStorage.getItem(STORAGE_KEY));
     if (!games || games.length !== initialGames.length) {
       games = initialGames;
