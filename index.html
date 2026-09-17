@@ -195,23 +195,23 @@
       <!-- Quick Action: 포트폴리오 버튼과 메뉴 사이에 확실한 여백(pl-6) 및 세로 구분선(border-l) 추가 -->
       <div class="flex items-center gap-2 sm:gap-2.5 shrink-0 pl-2 lg:pl-6 lg:border-l lg:border-slate-200/80">
         <button id="navBtnPortfolio" onclick="showView('portfolio')" 
-                class="nav-tab-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-slate-900 text-white shadow-xs whitespace-nowrap">
-          <i data-lucide="user" class="w-3.5 h-3.5"></i>
-          <span>포트폴리오</span>
+                class="nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-slate-900 text-white shadow-xs whitespace-nowrap leading-none">
+          <i data-lucide="user" class="w-3.5 h-3.5 shrink-0"></i>
+          <span class="inline-flex items-center leading-none">포트폴리오</span>
         </button>
 
         <button id="navBtnGame" onclick="showView('game-history')" 
-                class="nav-tab-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/80 shadow-xs whitespace-nowrap"
+                class="nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/80 shadow-xs whitespace-nowrap leading-none"
                 title="매일 구글 플레이 상위 게임 플레이 및 역기획 분석 이력">
-          <i data-lucide="gamepad-2" class="w-3.5 h-3.5 text-emerald-600"></i>
-          <span class="font-bold">게임 플레이 이력</span>
+          <i data-lucide="gamepad-2" class="w-3.5 h-3.5 text-emerald-600 shrink-0"></i>
+          <span class="inline-flex items-center leading-none font-bold">게임 플레이 이력</span>
         </button>
 
         <button id="navBtnStudy" onclick="showView('study-plan')" 
-                class="nav-tab-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200/80 shadow-xs whitespace-nowrap"
+                class="nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200/80 shadow-xs whitespace-nowrap leading-none"
                 title="도서관 대여 도서 CSTS 수험 공부 계획 및 체크표">
-          <i data-lucide="book-open-check" class="w-3.5 h-3.5 text-indigo-600"></i>
-          <span class="font-bold">공부 계획 세우기</span>
+          <i data-lucide="book-open-check" class="w-3.5 h-3.5 text-indigo-600 shrink-0"></i>
+          <span class="inline-flex items-center leading-none font-bold">공부 계획 세우기</span>
         </button>
 
         <a href="https://store.onstove.com/games/104620" target="_blank" rel="noopener"
@@ -958,7 +958,7 @@
       <!-- Top Pill -->
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium mb-4">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span>교수님 피드백 반영 과제 · 모바일 게임 트렌드 분석 (9.10 ~ 9.23)</span>
+        <span>모바일 게임 트렌드 분석 (9.10 ~ 9.23)</span>
       </div>
 
       <!-- Main Title -->
@@ -1183,7 +1183,7 @@
       <!-- Top Pill -->
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-medium mb-4">
         <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
-        <span>교수님 피드백 반영 과제 · 도서관 대여 도서 기반 자격증 취득 로드맵</span>
+        <span>도서관 대여 도서 기반 자격증 취득 로드맵</span>
       </div>
 
       <!-- Main Title -->
@@ -1503,19 +1503,19 @@
 
       if (btnPort) {
         if (viewName === 'portfolio') {
-          btnPort.className = 'nav-tab-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-slate-900 text-white shadow-xs whitespace-nowrap';
+          btnPort.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-slate-900 text-white shadow-xs whitespace-nowrap leading-none';
         } else {
-          btnPort.className = 'nav-tab-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-white hover:bg-slate-100 text-slate-700 border border-slate-200/80 shadow-xs whitespace-nowrap';
+          btnPort.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-white hover:bg-slate-100 text-slate-700 border border-slate-200/80 shadow-xs whitespace-nowrap leading-none';
         }
       }
 
       if (btnGame) {
         const icon = btnGame.querySelector('i');
         if (viewName === 'game-history') {
-          btnGame.className = 'nav-tab-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-emerald-600 text-white shadow-xs whitespace-nowrap';
+          btnGame.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-emerald-600 text-white shadow-xs whitespace-nowrap leading-none';
           if (icon) { icon.classList.remove('text-emerald-600'); icon.classList.add('text-emerald-200'); }
         } else {
-          btnGame.className = 'nav-tab-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/80 shadow-xs whitespace-nowrap';
+          btnGame.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/80 shadow-xs whitespace-nowrap leading-none';
           if (icon) { icon.classList.remove('text-emerald-200'); icon.classList.add('text-emerald-600'); }
         }
       }
@@ -1523,10 +1523,10 @@
       if (btnStudy) {
         const icon = btnStudy.querySelector('i');
         if (viewName === 'study-plan') {
-          btnStudy.className = 'nav-tab-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-indigo-600 text-white shadow-xs whitespace-nowrap';
+          btnStudy.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-indigo-600 text-white shadow-xs whitespace-nowrap leading-none';
           if (icon) { icon.classList.remove('text-indigo-600'); icon.classList.add('text-indigo-200'); }
         } else {
-          btnStudy.className = 'nav-tab-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200/80 shadow-xs whitespace-nowrap';
+          btnStudy.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200/80 shadow-xs whitespace-nowrap leading-none';
           if (icon) { icon.classList.remove('text-indigo-200'); icon.classList.add('text-indigo-600'); }
         }
       }
@@ -1629,7 +1629,7 @@
       <!-- Top Pill -->
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium mb-4">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span>교수님 피드백 반영 과제 · 모바일 게임 트렌드 분석 (9.10 ~ 9.23)</span>
+        <span>모바일 게임 트렌드 분석 (9.10 ~ 9.23)</span>
       </div>
 
       <!-- Main Title -->
@@ -2253,7 +2253,7 @@
       <!-- Top Pill -->
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-medium mb-4">
         <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
-        <span>교수님 피드백 반영 과제 · 도서관 대여 도서 기반 자격증 취득 로드맵</span>
+        <span>도서관 대여 도서 기반 자격증 취득 로드맵</span>
       </div>
 
       <!-- Main Title -->
@@ -2418,100 +2418,100 @@
         partId: 1,
         partName: 'PART 1',
         title: '테스트 개요',
-        date: '2026.09.10',
+        date: '9.10 ~ 9.15',
         color: 'emerald',
         items: [
-          { id: '1-1', code: '1.1', title: '테스트 목적', isExercise: false },
-          { id: '1-2', code: '1.2', title: '오류, 결함, 장애', isExercise: false },
-          { id: '1-3', code: '1.3', title: '테스트의 현실/실제', isExercise: false },
-          { id: '1-4', code: '1.4', title: '테스트와 품질', isExercise: false },
-          { id: '1-5', code: '1.5', title: '테스트 기본 용어', isExercise: false },
-          { id: '1-6', code: 'Ex', title: 'Exercise (연습문제 풀이)', isExercise: true },
+          { id: '1-1', code: '1.1', date: '9월 10일', title: '테스트 목적', isExercise: false },
+          { id: '1-2', code: '1.2', date: '9월 11일', title: '오류, 결함, 장애', isExercise: false },
+          { id: '1-3', code: '1.3', date: '9월 12일', title: '테스트의 현실/실제', isExercise: false },
+          { id: '1-4', code: '1.4', date: '9월 13일', title: '테스트와 품질', isExercise: false },
+          { id: '1-5', code: '1.5', date: '9월 14일', title: '테스트 기본 용어', isExercise: false },
+          { id: '1-6', code: 'Ex', date: '9월 15일', title: 'Exercise (연습문제 풀이)', isExercise: true },
         ]
       },
       {
         partId: 2,
         partName: 'PART 2',
         title: '테스트 분류와 테스팅 방법',
-        date: '2026.09.11',
+        date: '9.16 ~ 9.19',
         color: 'indigo',
         items: [
-          { id: '2-1', code: '2.1', title: '개요', isExercise: false },
-          { id: '2-2', code: '2.2', title: '테스트 분류', isExercise: false },
-          { id: '2-3', code: '2.3', title: '테스팅 방법', isExercise: false },
-          { id: '2-4', code: 'Ex', title: 'Exercise (연습문제 풀이)', isExercise: true },
+          { id: '2-1', code: '2.1', date: '9월 16일', title: '개요', isExercise: false },
+          { id: '2-2', code: '2.2', date: '9월 17일', title: '테스트 분류', isExercise: false },
+          { id: '2-3', code: '2.3', date: '9월 18일', title: '테스팅 방법', isExercise: false },
+          { id: '2-4', code: 'Ex', date: '9월 19일', title: 'Exercise (연습문제 풀이)', isExercise: true },
         ]
       },
       {
         partId: 3,
         partName: 'PART 3',
         title: '소프트웨어 개발 단계와 테스트',
-        date: '2026.09.12',
+        date: '9.20 ~ 9.25',
         color: 'blue',
         items: [
-          { id: '3-1', code: '3.1', title: '개요', isExercise: false },
-          { id: '3-2', code: '3.2', title: '컴포넌트 테스트', isExercise: false },
-          { id: '3-3', code: '3.3', title: '통합 테스트', isExercise: false },
-          { id: '3-4', code: '3.4', title: '시스템 테스트 및 인수 테스트', isExercise: false },
-          { id: '3-5', code: '3.5', title: '리그레션 테스트', isExercise: false },
-          { id: '3-6', code: 'Ex', title: 'Exercise (연습문제 풀이)', isExercise: true },
+          { id: '3-1', code: '3.1', date: '9월 20일', title: '개요', isExercise: false },
+          { id: '3-2', code: '3.2', date: '9월 21일', title: '컴포넌트 테스트', isExercise: false },
+          { id: '3-3', code: '3.3', date: '9월 22일', title: '통합 테스트', isExercise: false },
+          { id: '3-4', code: '3.4', date: '9월 23일', title: '시스템 테스트 및 인수 테스트', isExercise: false },
+          { id: '3-5', code: '3.5', date: '9월 24일', title: '리그레션 테스트', isExercise: false },
+          { id: '3-6', code: 'Ex', date: '9월 25일', title: 'Exercise (연습문제 풀이)', isExercise: true },
         ]
       },
       {
         partId: 4,
         partName: 'PART 4',
         title: '품질 특성과 비기능 테스트',
-        date: '2026.09.13',
+        date: '9.26 ~ 10.05',
         color: 'purple',
         items: [
-          { id: '4-1', code: '4.1', title: '개요', isExercise: false },
-          { id: '4-2', code: '4.2', title: '기능 적합성 테스트', isExercise: false },
-          { id: '4-3', code: '4.3', title: '성능 효율성 테스트', isExercise: false },
-          { id: '4-4', code: '4.4', title: '호환성 테스트', isExercise: false },
-          { id: '4-5', code: '4.5', title: '사용성 테스트', isExercise: false },
-          { id: '4-6', code: '4.6', title: '신뢰성 테스트', isExercise: false },
-          { id: '4-7', code: '4.7', title: '보안성 테스트', isExercise: false },
-          { id: '4-8', code: '4.8', title: '유지보수성 테스트', isExercise: false },
-          { id: '4-9', code: '4.9', title: '이식성 테스트', isExercise: false },
-          { id: '4-10', code: 'Ex', title: 'Exercise (연습문제 풀이)', isExercise: true },
+          { id: '4-1', code: '4.1', date: '9월 26일', title: '개요', isExercise: false },
+          { id: '4-2', code: '4.2', date: '9월 27일', title: '기능 적합성 테스트', isExercise: false },
+          { id: '4-3', code: '4.3', date: '9월 28일', title: '성능 효율성 테스트', isExercise: false },
+          { id: '4-4', code: '4.4', date: '9월 29일', title: '호환성 테스트', isExercise: false },
+          { id: '4-5', code: '4.5', date: '9월 30일', title: '사용성 테스트', isExercise: false },
+          { id: '4-6', code: '4.6', date: '10월 1일', title: '신뢰성 테스트', isExercise: false },
+          { id: '4-7', code: '4.7', date: '10월 2일', title: '보안성 테스트', isExercise: false },
+          { id: '4-8', code: '4.8', date: '10월 3일', title: '유지보수성 테스트', isExercise: false },
+          { id: '4-9', code: '4.9', date: '10월 4일', title: '이식성 테스트', isExercise: false },
+          { id: '4-10', code: 'Ex', date: '10월 5일', title: 'Exercise (연습문제 풀이)', isExercise: true },
         ]
       },
       {
         partId: 5,
         partName: 'PART 5',
         title: '위험 기반 테스트',
-        date: '2026.09.14',
+        date: '10.06 ~ 10.09',
         color: 'amber',
         items: [
-          { id: '5-1', code: '5.1', title: '개요', isExercise: false },
-          { id: '5-2', code: '5.2', title: '위험 분석', isExercise: false },
-          { id: '5-3', code: '5.3', title: '위험 기반 테스트 수행', isExercise: false },
-          { id: '5-4', code: 'Ex', title: 'Exercise (연습문제 풀이)', isExercise: true },
+          { id: '5-1', code: '5.1', date: '10월 6일', title: '개요', isExercise: false },
+          { id: '5-2', code: '5.2', date: '10월 7일', title: '위험 분석', isExercise: false },
+          { id: '5-3', code: '5.3', date: '10월 8일', title: '위험 기반 테스트 수행', isExercise: false },
+          { id: '5-4', code: 'Ex', date: '10월 9일', title: 'Exercise (연습문제 풀이)', isExercise: true },
         ]
       },
       {
         partId: 6,
         partName: 'PART 6',
         title: '소프트웨어 생명 주기 모델과 테스트',
-        date: '2026.09.15',
+        date: '10.10 ~ 10.12',
         color: 'teal',
         items: [
-          { id: '6-1', code: '6.1', title: '순차적 개발 모델', isExercise: false },
-          { id: '6-2', code: '6.2', title: '진화적 개발 모델', isExercise: false },
-          { id: '6-3', code: 'Ex', title: 'Exercise (연습문제 풀이)', isExercise: true },
+          { id: '6-1', code: '6.1', date: '10월 10일', title: '순차적 개발 모델', isExercise: false },
+          { id: '6-2', code: '6.2', date: '10월 11일', title: '진화적 개발 모델', isExercise: false },
+          { id: '6-3', code: 'Ex', date: '10월 12일', title: 'Exercise (연습문제 풀이)', isExercise: true },
         ]
       },
       {
         partId: 7,
         partName: 'PART 7',
         title: '테스트 자동화',
-        date: '2026.09.16',
+        date: '10.13 ~ 10.16',
         color: 'rose',
         items: [
-          { id: '7-1', code: '7.1', title: '개요', isExercise: false },
-          { id: '7-2', code: '7.2', title: '테스트 자동화 분야 및 테스트 도구', isExercise: false },
-          { id: '7-3', code: '7.3', title: '테스트 도구 선정', isExercise: false },
-          { id: '7-4', code: 'Ex', title: 'Exercise (연습문제 풀이)', isExercise: true },
+          { id: '7-1', code: '7.1', date: '10월 13일', title: '개요', isExercise: false },
+          { id: '7-2', code: '7.2', date: '10월 14일', title: '테스트 자동화 분야 및 테스트 도구', isExercise: false },
+          { id: '7-3', code: '7.3', date: '10월 15일', title: '테스트 도구 선정', isExercise: false },
+          { id: '7-4', code: 'Ex', date: '10월 16일', title: 'Exercise (연습문제 풀이)', isExercise: true },
         ]
       }
     ];
@@ -2628,9 +2628,12 @@
           <div class="flex items-center gap-3.5">
             <input type="checkbox" id="chk-${it.id}" onchange="toggleCheck('${it.id}')" ${isChecked ? 'checked' : ''} 
                    class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300 cursor-pointer" />
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
               <span class="font-mono text-xs px-2 py-0.5 rounded ${it.isExercise ? 'bg-amber-100 text-amber-800 font-bold' : 'bg-slate-100 text-slate-600 font-semibold'}">
                 ${it.code}
+              </span>
+              <span class="font-mono text-[11px] text-indigo-700 font-semibold bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100/80 shrink-0">
+                ${it.date || ''}
               </span>
               <label for="chk-${it.id}" class="text-xs sm:text-sm font-medium title-text cursor-pointer select-none">
                 ${it.title}
