@@ -169,13 +169,13 @@
 
     /* ── 인터랙티브 3D 게임 카드 3장 개별 호버 효과 ── */
     .interactive-card {
-      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.35s ease;
+      transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.32s ease;
       will-change: transform, filter;
     }
     .interactive-card:hover {
       z-index: 50 !important;
-      transform: translateY(-16px) scale(1.05);
-      filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.28)) !important;
+      transform: translateY(-10px) scale(1.06);
+      filter: drop-shadow(0 16px 24px rgba(0, 0, 0, 0.25)) !important;
     }
   </style>
 </head>
@@ -282,29 +282,29 @@
           </div>
         </div>
 
-        <!-- Right: 3D 게임 카드 3장 인터랙티브 스택 (각 카드 개별 호버 & 개별 프로젝트 다이렉트 이동) -->
-        <div class="reveal delay-200 w-full lg:w-auto flex justify-center lg:justify-end shrink-0 pt-6 lg:pt-0">
-          <div class="relative w-64 sm:w-72 md:w-80 lg:w-[320px] xl:w-[350px] aspect-[1301/1982] select-none">
+        <!-- Right: 3D 게임 카드 3장 인터랙티브 스택 (절반 크기 & 우상단 밀착 배치) -->
+        <div class="reveal delay-200 w-full lg:w-auto flex justify-center lg:justify-end shrink-0 pt-4 lg:pt-0 lg:self-start lg:-mt-6 xl:-mt-10 lg:translate-x-2 xl:translate-x-4">
+          <div class="relative w-36 sm:w-40 md:w-44 lg:w-[165px] xl:w-[180px] aspect-[1301/1982] select-none">
             
             <!-- 1. 쥐독한 등반 (상단 카드) -->
             <a href="#project-rat" 
                class="interactive-card absolute top-0 left-0 w-full block cursor-pointer z-10"
                title="쥐독한 등반 프로젝트 보러가기">
-              <img src="card-rat.png" alt="쥐독한 등반 3D 입체 카드" class="w-full h-auto object-contain filter drop-shadow-md" />
+              <img src="card-rat.png" alt="쥐독한 등반 3D 입체 카드" class="w-full h-auto object-contain filter drop-shadow-sm" />
             </a>
 
             <!-- 2. 나의 작은 샐러드팜 (중간 카드) -->
             <a href="#project-salad" 
                class="interactive-card absolute top-[26.5%] left-0 w-full block cursor-pointer z-20"
                title="나의 작은 샐러드팜 프로젝트 보러가기">
-              <img src="card-salad.png" alt="나의 작은 샐러드팜 3D 입체 카드" class="w-full h-auto object-contain filter drop-shadow-md" />
+              <img src="card-salad.png" alt="나의 작은 샐러드팜 3D 입체 카드" class="w-full h-auto object-contain filter drop-shadow-sm" />
             </a>
 
             <!-- 3. Pill Agents (하단 카드) -->
             <a href="#project-pill" 
                class="interactive-card absolute top-[53.5%] left-0 w-full block cursor-pointer z-30"
                title="Pill Agents 프로젝트 보러가기">
-              <img src="card-pill.png" alt="Pill Agents 3D 입체 카드" class="w-full h-auto object-contain filter drop-shadow-md" />
+              <img src="card-pill.png" alt="Pill Agents 3D 입체 카드" class="w-full h-auto object-contain filter drop-shadow-sm" />
             </a>
 
           </div>
