@@ -409,7 +409,12 @@
           <div class="swiper swiper-book swiper-pc-book swiper-pill">
             <div class="swiper-wrapper">
               
-              <!-- 슬라이드 1: 인게임 플레이 -->
+              <!-- 슬라이드 1: Pill Agents 메인 대표 이미지 (content.png) -->
+              <div class="swiper-slide">
+                <img src="content.png" class="w-full h-full object-cover" alt="Pill Agents 메인 대표 이미지" />
+              </div>
+
+              <!-- 슬라이드 2: 인게임 플레이 -->
               <div class="swiper-slide">
                 <img src="pill-1.png" class="w-full h-full object-cover" alt="Pill Agents 인게임 플레이" />
               </div>
@@ -507,34 +512,39 @@
           <div class="swiper swiper-book swiper-pc-book swiper-rat">
             <div class="swiper-wrapper">
               
-              <!-- 슬라이드 1: game-cover.png -->
+              <!-- 슬라이드 1: game-cover.png (원래 공식 대표 커버) -->
               <div class="swiper-slide">
-                <img src="game-cover.png" class="w-full h-full object-cover" alt="쥐독한 등반 공식 커버" />
+                <img src="game-cover.png" class="w-full h-full object-cover" alt="쥐독한 등반 공식 대표 커버" />
               </div>
 
-              <!-- 슬라이드 2: rat-play1.png -->
+              <!-- 슬라이드 2: rat-play1.png (그림1) -->
               <div class="swiper-slide">
-                <img src="rat-play1.png" class="w-full h-full object-cover" alt="쥐독한 등반 인게임 플레이 1" />
+                <img src="rat-play1.png" class="w-full h-full object-cover" alt="쥐독한 등반 룸 레벨 플레이 1" />
               </div>
 
-              <!-- 슬라이드 3: rat-play2.png -->
+              <!-- 슬라이드 3: rat-play2.png (그림2) -->
               <div class="swiper-slide">
-                <img src="rat-play2.png" class="w-full h-full object-cover" alt="쥐독한 등반 인게임 플레이 2" />
+                <img src="rat-play2.png" class="w-full h-full object-cover" alt="쥐독한 등반 룸 레벨 플레이 2" />
               </div>
 
-              <!-- 슬라이드 4: rat-play3.png -->
+              <!-- 슬라이드 4: rat-play3.png (그림3) -->
               <div class="swiper-slide">
-                <img src="rat-play3.png" class="w-full h-full object-cover" alt="쥐독한 등반 고난도 함정 및 물리 기믹" />
+                <img src="rat-play3.png" class="w-full h-full object-cover" alt="쥐독한 등반 룸 레벨 플레이 3" />
               </div>
 
-              <!-- 슬라이드 5: rat-play4.png -->
+              <!-- 슬라이드 5: rat-play4.png (스크린샷 1) -->
               <div class="swiper-slide">
-                <img src="rat-play4.png" class="w-full h-full object-cover" alt="쥐독한 등반 정밀 발판 플랫포밍" />
+                <img src="rat-play4.png" class="w-full h-full object-cover" alt="쥐독한 등반 고난도 함정 및 물리 기믹" />
               </div>
 
-              <!-- 슬라이드 6: rat-play5.png -->
+              <!-- 슬라이드 6: rat-play5.png (스크린샷 2) -->
               <div class="swiper-slide">
-                <img src="rat-play5.png" class="w-full h-full object-cover" alt="쥐독한 등반 상층부 도전 구간" />
+                <img src="rat-play5.png" class="w-full h-full object-cover" alt="쥐독한 등반 정밀 발판 플랫포밍" />
+              </div>
+
+              <!-- 슬라이드 7: rat-play6.png (스크린샷 3) -->
+              <div class="swiper-slide">
+                <img src="rat-play6.png" class="w-full h-full object-cover" alt="쥐독한 등반 상층부 도전 구간" />
               </div>
 
             </div>
@@ -1400,9 +1410,9 @@
       slidesPerView: 'auto',
       centeredSlides: true,
       grabCursor: true,
+      initialSlide: 0,
       loop: true,
-      loopedSlides: 3,
-      speed: 700,
+      speed: 600,
       coverflowEffect: {
         rotate: 0,          // 3D 회전 왜곡 제거: 완벽한 둥근 사각형 유지!
         stretch: -25,       // 슬라이드가 살짝 더 안쪽으로 붙도록
@@ -1410,11 +1420,7 @@
         modifier: 1,
         slideShadows: false,
       },
-      autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-        pauseOnMouseEnter: true,
-      },
+      autoplay: false,      // 자동 롤링으로 대표 이미지가 넘어가지 않고, 첫 대표 이미지가 항상 먼저 보이도록 고정
       keyboard: { enabled: true },
       pagination: {
         el: `.${prefix}-pag`,
@@ -1424,6 +1430,11 @@
         nextEl: `.${prefix}-next`,
         prevEl: `.${prefix}-prev`,
       },
+      on: {
+        init: function() {
+          this.slideToLoop(0, 0);
+        }
+      }
     });
 
     // ── 모바일 세로형 슬라이더 설정 (9:16) ──
@@ -1432,9 +1443,9 @@
       slidesPerView: 'auto',
       centeredSlides: true,
       grabCursor: true,
+      initialSlide: 0,
       loop: true,
-      loopedSlides: 3,
-      speed: 700,
+      speed: 600,
       coverflowEffect: {
         rotate: 0,          // 3D 회전 왜곡 제거: 완벽한 둥근 사각형 유지!
         stretch: -15,
@@ -1442,11 +1453,7 @@
         modifier: 1,
         slideShadows: false,
       },
-      autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-        pauseOnMouseEnter: true,
-      },
+      autoplay: false,      // 첫 대표 이미지가 항상 먼저 보이도록 고정
       keyboard: { enabled: true },
       pagination: {
         el: `.${prefix}-pag`,
@@ -1456,6 +1463,11 @@
         nextEl: `.${prefix}-next`,
         prevEl: `.${prefix}-prev`,
       },
+      on: {
+        init: function() {
+          this.slideToLoop(0, 0);
+        }
+      }
     });
 
     // 슬라이더 초기화
