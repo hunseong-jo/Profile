@@ -1010,8 +1010,8 @@
   <!-- ── MAIN CONTENT ── -->
   <main class="max-w-6xl mx-auto px-6 lg:px-8 py-10">
 
-    <!-- 🌟 FEATURED REVIEW CARD: 1일차 픽셀 테이머즈 -->
-    <section class="mb-12">
+    <!-- 🌟 FEATURED REVIEW CARD -->
+    <section class="mb-12 hidden">
       <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
@@ -1098,10 +1098,10 @@
           전체 보기 (14)
         </button>
         <button id="filterDone" onclick="filterGames('completed')" class="filter-btn px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
-          기록 완료 (1)
+          기록 완료 (0)
         </button>
         <button id="filterPending" onclick="filterGames('pending')" class="filter-btn px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
-          예정 목록 (13)
+          예정 목록 (14)
         </button>
       </div>
 
@@ -1681,8 +1681,8 @@
   <!-- ── MAIN CONTENT ── -->
   <main class="max-w-6xl mx-auto px-6 lg:px-8 py-10">
 
-    <!-- 🌟 FEATURED REVIEW CARD: 1일차 픽셀 테이머즈 -->
-    <section class="mb-12">
+    <!-- 🌟 FEATURED REVIEW CARD -->
+    <section class="mb-12 hidden">
       <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
@@ -1769,10 +1769,10 @@
           전체 보기 (14)
         </button>
         <button id="filterDone" onclick="filterGames('completed')" class="filter-btn px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
-          기록 완료 (1)
+          기록 완료 (0)
         </button>
         <button id="filterPending" onclick="filterGames('pending')" class="filter-btn px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
-          예정 목록 (13)
+          예정 목록 (14)
         </button>
       </div>
 
@@ -1904,7 +1904,7 @@
   <script>
     // 원본 데이터 30종 (엑셀 그대로 연동)
     const initialGames = [
-      { id: 1, date: '9월 10일', name: '제우스: 오만의 신', time: '30분', level: '15레벨', genre: '방치형 RPG', desc: '그리스 신화 테마의 방치형 RPG. 직관적인 소환과 신화 영웅 육성 루프로 초반 몰입감을 높였으며, 빠른 템포의 보상 설계가 돋보임.' },
+      { id: 1, date: '9월 10일', name: '제우스: 오만의 신', time: '', level: '', genre: '방치형 RPG', desc: '' },
       { id: 2, date: '9월 11일', name: '리니지M', time: '', level: '', genre: 'MMORPG', desc: '' },
       { id: 3, date: '9월 12일', name: 'SOL: enchant', time: '', level: '', genre: '방치형 RPG', desc: '' },
       { id: 4, date: '9월 13일', name: 'WOS: 화이트아웃 서바이벌', time: '', level: '', genre: '생존 전략 (SLG)', desc: '' },
@@ -1921,7 +1921,7 @@
     ];
 
     // LocalStorage 연동
-    const STORAGE_KEY = 'user_game_history_prof_v1';
+    const STORAGE_KEY = 'user_game_history_prof_v2';
     let games = JSON.parse(localStorage.getItem(STORAGE_KEY));
     if (!games || games.length !== initialGames.length) {
       games = initialGames;
