@@ -1412,7 +1412,7 @@
       grabCursor: true,
       initialSlide: 0,
       loop: true,
-      speed: 600,
+      speed: 650,
       coverflowEffect: {
         rotate: 0,          // 3D 회전 왜곡 제거: 완벽한 둥근 사각형 유지!
         stretch: -25,       // 슬라이드가 살짝 더 안쪽으로 붙도록
@@ -1420,7 +1420,11 @@
         modifier: 1,
         slideShadows: false,
       },
-      autoplay: false,      // 자동 롤링으로 대표 이미지가 넘어가지 않고, 첫 대표 이미지가 항상 먼저 보이도록 고정
+      autoplay: {
+        delay: 3500,        // 3.5초마다 자연스럽게 다음 슬라이드로 자동 롤링
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
       keyboard: { enabled: true },
       pagination: {
         el: `.${prefix}-pag`,
@@ -1433,6 +1437,7 @@
       on: {
         init: function() {
           this.slideToLoop(0, 0);
+          if (this.autoplay) this.autoplay.stop(); // 화면에 보이기 전까지는 1번 이미지에 정지 대기
         }
       }
     });
@@ -1445,7 +1450,7 @@
       grabCursor: true,
       initialSlide: 0,
       loop: true,
-      speed: 600,
+      speed: 650,
       coverflowEffect: {
         rotate: 0,          // 3D 회전 왜곡 제거: 완벽한 둥근 사각형 유지!
         stretch: -15,
@@ -1453,7 +1458,11 @@
         modifier: 1,
         slideShadows: false,
       },
-      autoplay: false,      // 첫 대표 이미지가 항상 먼저 보이도록 고정
+      autoplay: {
+        delay: 3500,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
       keyboard: { enabled: true },
       pagination: {
         el: `.${prefix}-pag`,
@@ -1466,6 +1475,7 @@
       on: {
         init: function() {
           this.slideToLoop(0, 0);
+          if (this.autoplay) this.autoplay.stop();
         }
       }
     });
@@ -1474,6 +1484,37 @@
     const swiperPill = new Swiper('.swiper-pill', swiperPcConfig('swiper-pill'));
     const swiperRat = new Swiper('.swiper-rat', swiperPcConfig('swiper-rat'));
     const swiperSalad = new Swiper('.swiper-salad', swiperMobileConfig('swiper-salad'));
+
+    // ── 스마트 뷰포트 감지 (화면에 보일 때 1번 대표 이미지를 먼저 보여준 뒤 자동 롤링 시작) ──
+    const allSliders = [
+      { el: document.querySelector('.swiper-pill'), swiper: swiperPill },
+      { el: document.querySelector('.swiper-rat'), swiper: swiperRat },
+      { el: document.querySelector('.swiper-salad'), swiper: swiperSalad }
+    ];
+
+    if ('IntersectionObserver' in window) {
+      const sliderObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const item = allSliders.find(s => s.el === entry.target);
+          if (!item || !item.swiper || !item.swiper.autoplay) return;
+          if (entry.isIntersecting) {
+            // 화면에 나타나면 1번 대표 이미지를 유지한 상태에서 자동 슬라이드 시작
+            item.swiper.autoplay.start();
+          } else {
+            // 화면 밖에서는 다음 슬라이드로 멋대로 넘어가지 않도록 일시 정지
+            item.swiper.autoplay.stop();
+          }
+        });
+      }, { threshold: 0.2 });
+
+      allSliders.forEach(item => {
+        if (item.el) sliderObserver.observe(item.el);
+      });
+    } else {
+      allSliders.forEach(item => {
+        if (item.swiper && item.swiper.autoplay) item.swiper.autoplay.start();
+      });
+    }
   </script>
 
 
