@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="트릭컬 리바이브를 다시 접속하게 만드는 이유를 6개 시스템으로 분석한 자료.">
+<title>트릭컬 리바이브, 다시 접속하게 만드는 이유</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f8fb;--sf:#fff;--ink:#14202b;--mu:#566676;--ln:#d5e1ec;--b:#1f5fae;--bs:#e3eefa;--g:#1b7f55;--gs:#e0f3ea;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a24;--sf:#172633;--ink:#e8f0f6;--mu:#9fb2c3;--ln:#28405a;--b:#78b6ff;--bs:#1b3350;--g:#5fd0a0;--gs:#163a2d}}
+:root[data-theme="dark"]{--bg:#0f1a24;--sf:#172633;--ink:#e8f0f6;--mu:#9fb2c3;--ln:#28405a;--b:#78b6ff;--bs:#1b3350;--g:#5fd0a0;--gs:#163a2d}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 56px)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 "Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;word-break:keep-all;overflow-wrap:break-word}
+.w{max-width:780px;margin:0 auto;padding:0 20px}
+header{padding:56px 0 24px}
+.tag{display:inline-block;background:var(--bs);color:var(--b);border-radius:6px;padding:1px 10px;font-size:13px;font-weight:700}
+h1{font-size:clamp(30px,6vw,46px);line-height:1.25;font-weight:900;margin:14px 0 0;letter-spacing:-.02em}
+.sub{color:var(--mu);font-size:18px;margin:10px 0 0}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;margin:22px 0 0;font-size:14px;color:var(--mu)}
+.meta dt{font-weight:700;color:var(--b)}.meta dd{margin:0}
+.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:6px;overflow-x:auto;padding:10px 0;background:var(--bg);border-bottom:1px solid var(--ln);scrollbar-width:none}
+.toc::-webkit-scrollbar{display:none}
+.toc a{flex:none;color:var(--ink);text-decoration:none;font-size:14px;font-weight:500;padding:3px 14px;border-radius:999px;background:var(--bs)}
+section{padding:36px 0 8px}
+h2{font-size:clamp(22px,4vw,28px);margin:0 0 14px;font-weight:900;line-height:1.3}
+h3{font-size:17px;margin:0 0 8px}
+.lead{background:var(--b);color:#fff;border-radius:16px;padding:22px 24px;font-size:clamp(19px,3.4vw,24px);font-weight:700;line-height:1.5;margin:0 0 16px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lead{color:#0b1620}}
+:root[data-theme="dark"] .lead{color:#0b1620}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.card{background:var(--sf);border:1px solid var(--ln);border-top:4px solid var(--g);border-radius:12px;padding:16px 18px}
+.card b{display:block;color:var(--g);font-size:20px}
+.card p{margin:4px 0 0;font-size:15px}
+.sc{overflow-x:auto;background:var(--sf);border:1px solid var(--ln);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:15px}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--ln);vertical-align:top;line-height:1.55}
+th{background:var(--bs);color:var(--b)}tr:last-child td{border-bottom:0}td:first-child{font-weight:700;white-space:nowrap}
+.fig{background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:12px;text-align:center}
+.fig svg{width:100%;max-width:420px;height:auto}
+.fig p{margin:6px 0 0;font-size:14px;color:var(--mu)}
+.nd{fill:var(--bs);stroke:var(--b);stroke-width:1.5}.nt{fill:var(--ink);font:700 13px "Noto Sans KR",sans-serif;text-anchor:middle}
+.rg{fill:none;stroke:var(--g);stroke-width:2;stroke-dasharray:6 5}
+.sys{background:var(--sf);border:1px solid var(--ln);border-left:4px solid var(--b);border-radius:12px;padding:14px 18px;margin-bottom:12px}
+.sys ul{margin:6px 0 0;padding-left:20px}.sys li{margin-bottom:2px}
+.sys .ef{margin:8px 0 0;font-weight:700;color:var(--g)}
+.note{color:var(--mu);font-size:14px;margin:0 0 10px}
+footer{margin-top:36px;padding:24px 0 48px;border-top:1px solid var(--ln);color:var(--mu);font-size:14px}
+footer ul{padding-left:20px;margin:6px 0}
+a{color:var(--b)}a:focus-visible,.sc:focus-visible{outline:3px solid var(--g);outline-offset:2px}
+.header-hero{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:14px}
+.header-hero-content{flex:1;min-width:0}
+.header-hero-content h1{margin-top:0}
+.header-hero-thumb{flex:0 0 270px;max-width:270px;text-align:right}
+.header-hero-thumb img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:12px;border:1px solid var(--ln);box-shadow:0 6px 18px rgba(31,95,174,0.12);display:block}
+.header-hero-thumb figcaption{font-size:12px;color:var(--mu);margin-top:6px;text-align:center}
+@media (max-width:680px){
+  .header-hero{flex-direction:column-reverse;align-items:stretch;gap:16px}
+  .header-hero-thumb{flex:auto;max-width:100%;text-align:center}
+}
+.fig img{max-width:100%;height:auto;border-radius:8px;display:block;margin:0 auto}
+.fig figcaption,.fig p{margin:8px 0 0;font-size:14px;color:var(--mu)}
+@media print{.toc{display:none}body{background:#fff;color:#000}.sc{overflow:visible}.sys,.card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="w" id="top">
+<header>
+  <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+    <a href="index.html#game-analysis" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-size: 13px; font-weight: 700; color: var(--b); background: var(--bs); padding: 6px 14px; border-radius: 999px; transition: opacity .2s;">
+      ← 포트폴리오 게임 분석으로 돌아가기
+    </a>
+    <span style="font-size: 12px; color: var(--mu);">조훈성 게임 기획 포트폴리오 연동 문서</span>
+  </div>
+  <span class="tag">기준일 2026-10-02 · Google Play</span>
+  <div class="header-hero">
+    <div class="header-hero-content">
+      <h1>트릭컬 리바이브,<br>다시 접속하게 만드는 이유</h1>
+      <p class="sub">유저를 붙잡는 시스템 6가지 분석</p>
+      <dl class="meta">
+        <dt>분석 대상</dt><dd>트릭컬 리바이브 (Google Play)</dd>
+        <dt>자료</dt><dd>공식 공지 · 언론 보도 · 가이드 (하단 출처)</dd>
+        <dt>작성</dt><dd>202227069 조훈성</dd>
+      </dl>
+    </div>
+    <div class="header-hero-thumb">
+      <img src="trickcal-header.jpg" alt="트릭컬 리바이브 공식 키아트">
+      <figcaption>트릭컬 리바이브 공식 일러스트</figcaption>
+    </div>
+  </div>
+</header>
+<nav class="toc" aria-label="목차"><a href="#conclusion">결론</a><a href="#loop">재접속 루프</a><a href="#table">요약표</a><a href="#detail">시스템별 상세</a><a href="#risk">한계</a><a href="#src">출처</a></nav>
+
+<section id="conclusion" style="padding-top:28px">
+  <h2>결론: 내가 다시 접속하는 이유 3가지</h2>
+  <p class="lead">강해지고 싶어서가 아니다. 응원하고, 정이 들고, 같이 웃기 때문에 다시 켠다.</p>
+  <div class="cards">
+    <div class="card"><b>① 응원</b><p>대표의 사비 투입과 위기 극복 서사가 있다. 과금과 플레이가 지출이 아니라 응원이 된다.</p></div>
+    <div class="card"><b>② 애착</b><p>볼따구와 연회장 교감이 있다. 정을 쏟을수록 새 반응이 열린다.</p></div>
+    <div class="card"><b>③ 소속감</b><p>방송과 밈이 있다. 개발진이 직접 망가지며 같은 눈높이에서 웃는다.</p></div>
+  </div>
+  <h3 style="margin-top:22px">일반 수집형 RPG와 다른 점</h3>
+  <div class="sc" tabindex="0" role="region" aria-label="비교 표"><table>
+    <thead><tr><th>구분</th><th>일반 수집형 RPG</th><th>트릭컬 리바이브</th></tr></thead>
+    <tbody>
+    <tr><td>과금 동기</td><td>경쟁, 과시</td><td>응원, 지지</td></tr>
+    <tr><td>유저 위치</td><td>고객</td><td>함께 살려낸 동반자(교주)</td></tr>
+    <tr><td>캐릭터</td><td>티어·스탯 중심 도구</td><td>교감하는 애착 대상</td></tr>
+    <tr><td>소통</td><td>일방향 공지</td><td>밈과 자폭 개그의 라이브 방송</td></tr>
+    <tr><td>엔드 콘텐츠</td><td>하드코어 랭킹전</td><td>밈 생산, 교감, 가벼운 경쟁</td></tr>
+    </tbody></table></div>
+  <div class="fig" style="margin-top: 18px;">
+    <img src="trickcal-intro-launch.jpg" alt="트릭컬 리바이브 정식 출시 공식 일러스트">
+    <p>▲ 2023년 정식 리바이브 출시 공식 비주얼 — 실패를 딛고 유저(교주)와 함께 살아난 서사의 출발점</p>
+  </div>
+</section>
+
+<section id="loop">
+  <h2>재접속 루프</h2>
+  <div class="fig">
+    <svg viewBox="0 0 360 340" role="img" aria-label="서사 공유, 응원 플레이, 캐릭터 애착, 밈과 공략 확산, 신규 유입이 시계 방향으로 이어지는 순환도">
+      <circle class="rg" cx="180" cy="180" r="125"/>
+      <g><rect class="nd" x="124" y="35" width="112" height="40" rx="10"/><text class="nt" x="180" y="60">1 서사 공유</text>
+      <rect class="nd" x="243" y="121" width="112" height="40" rx="10"/><text class="nt" x="299" y="146">2 응원 플레이</text>
+      <rect class="nd" x="198" y="261" width="112" height="40" rx="10"/><text class="nt" x="254" y="286">3 캐릭터 애착</text>
+      <rect class="nd" x="50" y="261" width="112" height="40" rx="10"/><text class="nt" x="106" y="286">4 밈·공략 확산</text>
+      <rect class="nd" x="5" y="121" width="112" height="40" rx="10"/><text class="nt" x="61" y="146">5 신규 유입</text></g>
+      <text class="nt" x="180" y="186" style="font-size:16px">재접속</text>
+    </svg>
+    <p>시계 방향으로 반복. 5번은 다시 1번으로 이어진다.</p>
+  </div>
+</section>
+
+<section id="table">
+  <h2>시스템 6개 요약</h2>
+  <div class="sc" tabindex="0" role="region" aria-label="시스템 요약 표"><table>
+    <thead><tr><th>시스템</th><th>핵심</th><th>자극하는 동기</th></tr></thead>
+    <tbody>
+    <tr><td>방송·공식 밈</td><td>고객이 아니라 같은 세계관의 집단</td><td>소속감, 유머</td></tr>
+    <tr><td>대표 서사</td><td>과금이 응원으로 바뀜</td><td>응원, 친밀감</td></tr>
+    <tr><td>줘팸터 (PvP)</td><td>소규모 그룹, 주기적 리셋</td><td>성취감, 순위</td></tr>
+    <tr><td>엘리아스 프론티어</td><td>보스 기믹 교체, 공략 공유</td><td>도전, 전략</td></tr>
+    <tr><td>수집·시너지</td><td>확정 획득, 조합 다양성</td><td>수집, 최적화</td></tr>
+    <tr><td>연회장 친밀도</td><td>정을 쏟을수록 새 반응</td><td>감정적 애착</td></tr>
+    </tbody></table></div>
+</section>
+
+<section id="detail">
+  <h2>시스템별 상세</h2>
+  <div class="sys"><h3>1) 개발진·커뮤니티 유대감</h3><ul>
+    <li>기념일마다 특별 방송 (3주년: '무한도전' 재판 패러디)</li>
+    <li>공지에서 유저를 '교주님'으로 호칭</li>
+    <li>개발자 노트로 장기 로드맵 공유</li></ul>
+    <p class="ef">→ 밈이 신규 유저의 낮은 문턱이 된다.</p></div>
+  <div class="sys"><h3>2) 대표의 캐릭터화</h3><ul>
+    <li>존폐 위기 때 사비·자산을 투입한 일화</li>
+    <li>방송에서 대표와 PD가 직접 콩트</li>
+    <li>4월 '트릭컬 생존의 역사 전시회'</li></ul>
+    <p class="ef">→ "우리가 살려냈다"는 연대감, 자발적 밈·홍보.</p></div>
+  <div class="fig" style="margin: 14px 0 22px;">
+    <img src="trickcal-story-humor.jpg" alt="트릭컬 특유의 자폭 개그와 유머러스한 사도 대화">
+    <p>▲ 개발진의 자폭 개그와 유쾌한 스토리텔링이 녹아든 인게임 사도 대화 연출</p>
+  </div>
+  <div class="sys"><h3>3) 줘팸터 (PvP)</h3><ul>
+    <li>3월 26일 업데이트: PvP용 스킬·피해량 조정, 점검 후 전원 새 그룹 배정</li>
+    <li>비슷한 수준끼리 소규모 그룹 경쟁</li>
+    <li>주기적 리셋으로 줄 세우기 스트레스 완화</li></ul>
+    <p class="ef">→ 부담 없는 반복 참여 동기.</p></div>
+  <div class="sys"><h3>4) 엘리아스 프론티어</h3><ul>
+    <li>10월 1일 업데이트: 보스 효과 변경, 전용 지원 카드 추가</li>
+    <li>기믹 교체로 덱 재구성 유도</li></ul>
+    <p class="ef">→ 공략 공유와 토론의 계기.</p></div>
+  <div class="sys"><h3>5) 성장·수집 루프</h3><ul>
+    <li>포인트를 모으면 확정 획득하는 마일리지 소환</li>
+    <li>속성·역할군 조합 시너지</li>
+    <li>사도 증명서 교환, 보드 만개로 육성 병목 완화</li></ul>
+    <p class="ef">→ 이탈 감소, 낮은 티어도 활용, 조합 이야기 증가.</p></div>
+  <div class="fig" style="margin: 14px 0 22px;">
+    <img src="trickcal-system-battle.jpg" alt="트릭컬 전투 및 시너지 시스템">
+    <p>▲ 사도 출격 배치와 학년 강화, 카드 덱 및 속성 시너지가 결합된 핵심 전투/PvP 화면</p>
+  </div>
+  <div class="sys"><h3>6) 연회장 친밀도</h3><ul>
+    <li>음식 선물, 볼 당기기로 직접 교감</li>
+    <li>친밀도 상한 확장, 새 반응 대사 추가</li></ul>
+    <p class="ef">→ 캐릭터가 전투 도구에서 애착 대상으로 바뀐다.</p></div>
+  <div class="fig" style="margin: 14px 0 16px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; align-items: center;">
+      <img src="trickcal-system-commune.jpg" alt="교단 광장 사도 교감 화면" style="width: 100%; border-radius: 8px;">
+      <img src="trickcal-butter-trumpet.webp" alt="트릭컬 대표 밈 버터" style="width: 100%; max-height: 220px; object-fit: contain; border-radius: 8px;">
+    </div>
+    <p>▲ (좌) 사도들이 모여 상호작용하는 교단 본부 화면 / (우) 캐릭터 애착과 볼따구 밈 확산을 이끈 대표 마스코트</p>
+  </div>
+</section>
+
+<section id="risk">
+  <h2>흔들릴 수 있는 지점</h2>
+  <p class="note">분석자 해석</p>
+  <div class="sc" tabindex="0" role="region" aria-label="한계 표"><table>
+    <thead><tr><th>지점</th><th>내용</th></tr></thead>
+    <tbody>
+    <tr><td>신뢰 의존</td><td>과금이 응원이려면 운영 신뢰가 전제다. 실수는 애정만큼 크게 돌아온다.</td></tr>
+    <tr><td>교감 신선도</td><td>반응 대사는 한 번 보면 익숙해진다. 지속적인 추가가 필요하다.</td></tr>
+    <tr><td>서사의 일회성</td><td>위기 극복 서사는 이미 공유됐다. 새 에피소드가 이어져야 한다.</td></tr>
+    </tbody></table></div>
+</section>
+
+<footer id="src">
+  <h3>출처</h3>
+  <ul>
+    <li>인벤글로벌: 3주년 및 구글 플레이 매출 7위 보도</li>
+    <li>엑스포츠뉴스: 한정현 대표 2주년 인터뷰 (2025.10.01)</li>
+    <li>다음 뉴스: 에피드게임즈 200억원대 투자 유치 (2026.06.05)</li>
+    <li>트릭컬 리바이브 공식 공지 (패치노트, 2026 업데이트 계획)</li>
+    <li>나무위키: 시스템 및 캐릭터 항목</li>
+    <li>BlueStacks: 덱 구성 및 콘텐츠 가이드</li>
+  </ul>
+  <p>202227069 조훈성 · 기준일 2026-10-02 · <a href="#top">맨 위로 ↑</a></p>
+</footer>
+</div>
+</body>
+</html>
