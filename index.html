@@ -192,9 +192,9 @@
 
   <!-- ── NAVIGATION ── -->
   <nav class="fixed top-0 left-0 right-0 z-50 bg-[#fafafa]/95 backdrop-blur-md border-b border-gray-200/80 transition-all duration-300" id="navbar">
-    <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4">
       <!-- Logo / Name -->
-      <a href="javascript:void(0)" onclick="showView('portfolio')" class="flex items-center gap-2.5 group shrink-0" title="포트폴리오 홈">
+      <a href="javascript:void(0)" onclick="showView('portfolio')" class="flex items-center gap-2 group shrink-0" title="포트폴리오 홈">
         <span class="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-xs group-hover:scale-105 transition-transform">
           JS
         </span>
@@ -212,37 +212,43 @@
         <a href="#contact" onclick="showView('portfolio')" class="hover:text-slate-900 transition-colors py-1">연락처</a>
       </div>
 
-      <!-- Quick Action: 포트폴리오 버튼과 메뉴 사이에 확실한 여백(pl-6) 및 세로 구분선(border-l) 추가 -->
-      <div class="flex items-center gap-2 sm:gap-2.5 shrink-0 pl-2 lg:pl-6 lg:border-l lg:border-slate-200/80">
+      <!-- Quick Action: 모바일에서는 overflow-x-auto로 가로 스와이프 지원 및 반응형 축약 텍스트 적용 -->
+      <div class="flex items-center gap-1.5 sm:gap-2.5 overflow-x-auto no-scrollbar py-1 pl-1 lg:pl-6 lg:border-l lg:border-slate-200/80 max-w-[calc(100vw-110px)] sm:max-w-none shrink-0">
         <button id="navBtnPortfolio" onclick="showView('portfolio')" 
-                class="nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-slate-900 text-white shadow-xs whitespace-nowrap leading-none">
+                class="nav-tab-btn h-8 inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 rounded-lg text-xs font-semibold transition-all bg-slate-900 text-white shadow-xs whitespace-nowrap leading-none shrink-0">
           <i data-lucide="user" class="w-3.5 h-3.5 shrink-0"></i>
           <span class="inline-flex items-center leading-none">포트폴리오</span>
         </button>
 
         <button id="navBtnGame" onclick="showView('game-history')" 
-                class="nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/80 shadow-xs whitespace-nowrap leading-none"
+                class="nav-tab-btn h-8 inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 rounded-lg text-xs font-semibold transition-all bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/80 shadow-xs whitespace-nowrap leading-none shrink-0"
                 title="매일 구글 플레이 상위 게임 플레이 및 역기획 분석 이력">
           <i data-lucide="gamepad-2" class="w-3.5 h-3.5 text-emerald-600 shrink-0"></i>
-          <span class="inline-flex items-center leading-none font-bold">게임 플레이 이력</span>
+          <span class="inline-flex items-center leading-none font-bold">
+            <span class="hidden sm:inline">게임 플레이 이력</span>
+            <span class="sm:hidden">플레이 이력</span>
+          </span>
         </button>
 
         <button id="navBtnStudy" onclick="showView('study-plan')" 
-                class="nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200/80 shadow-xs whitespace-nowrap leading-none"
+                class="nav-tab-btn h-8 inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 rounded-lg text-xs font-semibold transition-all bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200/80 shadow-xs whitespace-nowrap leading-none shrink-0"
                 title="도서관 대여 도서 CSTS 수험 공부 계획 및 체크표">
           <i data-lucide="book-open-check" class="w-3.5 h-3.5 text-indigo-600 shrink-0"></i>
-          <span class="inline-flex items-center leading-none font-bold">공부 계획 세우기</span>
+          <span class="inline-flex items-center leading-none font-bold">
+            <span class="hidden sm:inline">공부 계획 세우기</span>
+            <span class="sm:hidden">공부 계획</span>
+          </span>
         </button>
 
         <button id="navBtnAnalysis" onclick="showView('game-analysis')" 
-                class="nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-violet-50 hover:bg-violet-100 text-violet-800 border border-violet-200/80 shadow-xs whitespace-nowrap leading-none"
+                class="nav-tab-btn h-8 inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 rounded-lg text-xs font-semibold transition-all bg-violet-50 hover:bg-violet-100 text-violet-800 border border-violet-200/80 shadow-xs whitespace-nowrap leading-none shrink-0"
                 title="게임 시스템 및 코어 루프, 레벨 디자인 심층 역기획 분석서 아카이브">
           <i data-lucide="file-text" class="w-3.5 h-3.5 text-violet-600 shrink-0"></i>
           <span class="inline-flex items-center leading-none font-bold">게임 분석</span>
         </button>
 
         <a href="genshin-event-planning.html"
-           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-50 text-sky-800 border border-sky-200/80 hover:bg-sky-100 hover:border-sky-300 transition-all ml-1 whitespace-nowrap shadow-xs"
+           class="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-50 text-sky-800 border border-sky-200/80 hover:bg-sky-100 hover:border-sky-300 transition-all whitespace-nowrap shadow-xs shrink-0"
            title="원신 7.0 스네즈나야 4인 TPS 협동 이벤트 기획서 (202227069 조훈성 게임 이벤트 기획)">
           <i data-lucide="sparkles" class="w-3.5 h-3.5 text-sky-600 shrink-0"></i>
           <span>이벤트 기획</span>
@@ -250,7 +256,7 @@
         </a>
 
         <a href="#contact" onclick="showView('portfolio')"
-           class="hidden 2xl:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white transition-all ml-1 whitespace-nowrap">
+           class="hidden 2xl:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white transition-all ml-1 whitespace-nowrap shrink-0">
           <i data-lucide="mail" class="w-3 h-3"></i>
           <span>연락하기</span>
         </a>
@@ -1428,6 +1434,9 @@
                 <span class="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse"></span>
                 <span>기준일 2026-10-02 · Google Play 역기획 아카이브</span>
               </span>
+              <span id="statAnalysisTotal" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-900 text-white text-xs font-bold font-mono shadow-2xs">
+                4편 등록 (확장 중)
+              </span>
               <span class="text-xs text-slate-400 font-mono">작성: 202227069 조훈성 (Game Planner)</span>
             </div>
 
@@ -1924,6 +1933,8 @@
 
     // ── PC 가로형 슬라이더 설정 (16:10) ──
     const swiperPcConfig = (prefix) => ({
+      observer: true,
+      observeParents: true,
       effect: 'coverflow',
       slidesPerView: 'auto',
       centeredSlides: true,
@@ -1962,6 +1973,8 @@
 
     // ── 모바일 세로형 슬라이더 설정 (9:16) ──
     const swiperMobileConfig = (prefix) => ({
+      observer: true,
+      observeParents: true,
       effect: 'coverflow',
       slidesPerView: 'auto',
       centeredSlides: true,
@@ -2063,6 +2076,12 @@
         renderGameHistory();
       } else if (viewName === 'game-analysis' && typeof renderAnalysisCards === 'function') {
         renderAnalysisCards();
+      } else if (viewName === 'portfolio') {
+        setTimeout(() => {
+          if (typeof swiperPill !== 'undefined' && swiperPill && swiperPill.update) swiperPill.update();
+          if (typeof swiperRat !== 'undefined' && swiperRat && swiperRat.update) swiperRat.update();
+          if (typeof swiperSalad !== 'undefined' && swiperSalad && swiperSalad.update) swiperSalad.update();
+        }, 50);
       }
 
       // Update Navigation Buttons Active State
@@ -2073,19 +2092,19 @@
 
       if (btnPort) {
         if (viewName === 'portfolio') {
-          btnPort.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-slate-900 text-white shadow-xs whitespace-nowrap leading-none';
+          btnPort.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 rounded-lg text-xs font-semibold transition-all bg-slate-900 text-white shadow-xs whitespace-nowrap leading-none shrink-0';
         } else {
-          btnPort.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-white hover:bg-slate-100 text-slate-700 border border-slate-200/80 shadow-xs whitespace-nowrap leading-none';
+          btnPort.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 rounded-lg text-xs font-semibold transition-all bg-white hover:bg-slate-100 text-slate-700 border border-slate-200/80 shadow-xs whitespace-nowrap leading-none shrink-0';
         }
       }
 
       if (btnGame) {
         const icon = btnGame.querySelector('i');
         if (viewName === 'game-history') {
-          btnGame.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-emerald-600 text-white shadow-xs whitespace-nowrap leading-none';
+          btnGame.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 rounded-lg text-xs font-semibold transition-all bg-emerald-600 text-white shadow-xs whitespace-nowrap leading-none shrink-0';
           if (icon) { icon.classList.remove('text-emerald-600'); icon.classList.add('text-emerald-200'); }
         } else {
-          btnGame.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/80 shadow-xs whitespace-nowrap leading-none';
+          btnGame.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 rounded-lg text-xs font-semibold transition-all bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/80 shadow-xs whitespace-nowrap leading-none shrink-0';
           if (icon) { icon.classList.remove('text-emerald-200'); icon.classList.add('text-emerald-600'); }
         }
       }
@@ -2093,10 +2112,10 @@
       if (btnStudy) {
         const icon = btnStudy.querySelector('i');
         if (viewName === 'study-plan') {
-          btnStudy.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-indigo-600 text-white shadow-xs whitespace-nowrap leading-none';
+          btnStudy.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 rounded-lg text-xs font-semibold transition-all bg-indigo-600 text-white shadow-xs whitespace-nowrap leading-none shrink-0';
           if (icon) { icon.classList.remove('text-indigo-600'); icon.classList.add('text-indigo-200'); }
         } else {
-          btnStudy.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200/80 shadow-xs whitespace-nowrap leading-none';
+          btnStudy.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 rounded-lg text-xs font-semibold transition-all bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200/80 shadow-xs whitespace-nowrap leading-none shrink-0';
           if (icon) { icon.classList.remove('text-indigo-200'); icon.classList.add('text-indigo-600'); }
         }
       }
@@ -2104,10 +2123,10 @@
       if (btnAnalysis) {
         const icon = btnAnalysis.querySelector('i');
         if (viewName === 'game-analysis') {
-          btnAnalysis.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-violet-600 text-white shadow-xs whitespace-nowrap leading-none';
+          btnAnalysis.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 rounded-lg text-xs font-semibold transition-all bg-violet-600 text-white shadow-xs whitespace-nowrap leading-none shrink-0';
           if (icon) { icon.classList.remove('text-violet-600'); icon.classList.add('text-violet-200'); }
         } else {
-          btnAnalysis.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all bg-violet-50 hover:bg-violet-100 text-violet-800 border border-violet-200/80 shadow-xs whitespace-nowrap leading-none';
+          btnAnalysis.className = 'nav-tab-btn h-8 inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 rounded-lg text-xs font-semibold transition-all bg-violet-50 hover:bg-violet-100 text-violet-800 border border-violet-200/80 shadow-xs whitespace-nowrap leading-none shrink-0';
           if (icon) { icon.classList.remove('text-violet-200'); icon.classList.add('text-violet-600'); }
         }
       }

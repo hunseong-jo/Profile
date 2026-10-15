@@ -214,44 +214,44 @@
     <!-- Row 2: 10-Chapter Navigation Bar (Smooth Horizontal Scrollable) -->
     <div class="border-t border-ice-100 bg-ice-50/50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <nav class="flex items-center gap-1 py-1.5 overflow-x-auto no-scrollbar scroll-smooth">
-          <a href="#summary" class="flex items-center gap-1.5 px-2.5 py-1 rounded-md hover:bg-white text-arctic-700 hover:text-arctic-900 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
+        <nav class="flex items-center gap-1 py-1.5 overflow-x-auto no-scrollbar scroll-smooth" id="chapterNav">
+          <a href="#summary" data-target="summary" class="chapter-nav-link flex items-center gap-1.5 px-2.5 py-1 rounded-md text-arctic-700 hover:text-arctic-900 hover:bg-white/80 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
             <span class="font-mono text-[10px] font-extrabold text-ice-600">00</span>
             <span>기획 서두</span>
           </a>
-          <a href="#feasibility" class="flex items-center gap-1.5 px-2.5 py-1 rounded-md hover:bg-white text-arctic-700 hover:text-arctic-900 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
+          <a href="#feasibility" data-target="feasibility" class="chapter-nav-link flex items-center gap-1.5 px-2.5 py-1 rounded-md text-arctic-700 hover:text-arctic-900 hover:bg-white/80 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
             <span class="font-mono text-[10px] font-extrabold text-ice-600">01</span>
             <span>R&D 타당성</span>
           </a>
-          <a href="#cost" class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white text-ice-900 font-bold border border-ice-200 shadow-2xs transition whitespace-nowrap text-xs">
-            <span class="font-mono text-[10px] font-extrabold text-ice-700">02</span>
+          <a href="#cost" data-target="cost" class="chapter-nav-link flex items-center gap-1.5 px-2.5 py-1 rounded-md text-arctic-700 hover:text-arctic-900 hover:bg-white/80 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
+            <span class="font-mono text-[10px] font-extrabold text-ice-600">02</span>
             <span>비용 효율성</span>
           </a>
-          <a href="#trend" class="flex items-center gap-1.5 px-2.5 py-1 rounded-md hover:bg-white text-arctic-700 hover:text-arctic-900 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
+          <a href="#trend" data-target="trend" class="chapter-nav-link flex items-center gap-1.5 px-2.5 py-1 rounded-md text-arctic-700 hover:text-arctic-900 hover:bg-white/80 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
             <span class="font-mono text-[10px] font-extrabold text-ice-600">03</span>
             <span>트렌드 매핑</span>
           </a>
-          <a href="#overview" class="flex items-center gap-1.5 px-2.5 py-1 rounded-md hover:bg-white text-arctic-700 hover:text-arctic-900 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
+          <a href="#overview" data-target="overview" class="chapter-nav-link flex items-center gap-1.5 px-2.5 py-1 rounded-md text-arctic-700 hover:text-arctic-900 hover:bg-white/80 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
             <span class="font-mono text-[10px] font-extrabold text-ice-600">04</span>
             <span>규격 및 서사</span>
           </a>
-          <a href="#classes" class="flex items-center gap-1.5 px-2.5 py-1 rounded-md hover:bg-white text-arctic-700 hover:text-arctic-900 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
+          <a href="#classes" data-target="classes" class="chapter-nav-link flex items-center gap-1.5 px-2.5 py-1 rounded-md text-arctic-700 hover:text-arctic-900 hover:bg-white/80 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
             <span class="font-mono text-[10px] font-extrabold text-ice-600">05</span>
             <span>화기 및 병과</span>
           </a>
-          <a href="#enemies" class="flex items-center gap-1.5 px-2.5 py-1 rounded-md hover:bg-white text-arctic-700 hover:text-arctic-900 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
+          <a href="#enemies" data-target="enemies" class="chapter-nav-link flex items-center gap-1.5 px-2.5 py-1 rounded-md text-arctic-700 hover:text-arctic-900 hover:bg-white/80 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
             <span class="font-mono text-[10px] font-extrabold text-ice-600">06</span>
             <span>기계 웨이브</span>
           </a>
-          <a href="#loop" class="flex items-center gap-1.5 px-2.5 py-1 rounded-md hover:bg-white text-arctic-700 hover:text-arctic-900 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
+          <a href="#loop" data-target="loop" class="chapter-nav-link flex items-center gap-1.5 px-2.5 py-1 rounded-md text-arctic-700 hover:text-arctic-900 hover:bg-white/80 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
             <span class="font-mono text-[10px] font-extrabold text-ice-600">07</span>
             <span>코어 루프</span>
           </a>
-          <a href="#retention" class="flex items-center gap-1.5 px-2.5 py-1 rounded-md hover:bg-white text-arctic-700 hover:text-arctic-900 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
+          <a href="#retention" data-target="retention" class="chapter-nav-link flex items-center gap-1.5 px-2.5 py-1 rounded-md text-arctic-700 hover:text-arctic-900 hover:bg-white/80 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
             <span class="font-mono text-[10px] font-extrabold text-ice-600">08</span>
             <span>리텐션 경제</span>
           </a>
-          <a href="#impact" class="flex items-center gap-1.5 px-2.5 py-1 rounded-md hover:bg-white text-arctic-700 hover:text-arctic-900 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
+          <a href="#impact" data-target="impact" class="chapter-nav-link flex items-center gap-1.5 px-2.5 py-1 rounded-md text-arctic-700 hover:text-arctic-900 hover:bg-white/80 border border-transparent hover:border-ice-200 transition whitespace-nowrap text-xs font-medium">
             <span class="font-mono text-[10px] font-extrabold text-ice-600">09</span>
             <span>기대 효과</span>
           </a>
@@ -1264,5 +1264,73 @@
     </div>
   </footer>
 
+  <!-- 10-Chapter Realtime Scrollspy Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const chapterLinks = document.querySelectorAll('.chapter-nav-link');
+      const sectionIds = ['summary', 'feasibility', 'cost', 'trend', 'overview', 'classes', 'enemies', 'loop', 'retention', 'impact'];
+      const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+
+      const activeClass = ['bg-white', 'text-ice-900', 'font-bold', 'border-ice-200', 'shadow-2xs'];
+      const inactiveClass = ['text-arctic-700', 'hover:text-arctic-900', 'hover:bg-white/80', 'border-transparent', 'hover:border-ice-200', 'font-medium'];
+
+      function setActiveChapter(targetId) {
+        chapterLinks.forEach(link => {
+          const isTarget = link.getAttribute('data-target') === targetId;
+          const numSpan = link.querySelector('span:first-child');
+          if (isTarget) {
+            link.classList.remove(...inactiveClass);
+            link.classList.add(...activeClass);
+            if (numSpan) {
+              numSpan.classList.remove('text-ice-600');
+              numSpan.classList.add('text-ice-700');
+            }
+            link.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+          } else {
+            link.classList.remove(...activeClass);
+            link.classList.add(...inactiveClass);
+            if (numSpan) {
+              numSpan.classList.remove('text-ice-700');
+              numSpan.classList.add('text-ice-600');
+            }
+          }
+        });
+      }
+
+      // Initial active tab
+      setActiveChapter('summary');
+
+      // Scroll listener with throttle
+      let isScrolling = false;
+      window.addEventListener('scroll', () => {
+        if (!isScrolling) {
+          window.requestAnimationFrame(() => {
+            const scrollPos = window.scrollY + 160;
+            let currentId = 'summary';
+
+            sections.forEach(sec => {
+              if (sec.offsetTop <= scrollPos) {
+                currentId = sec.id;
+              }
+            });
+
+            setActiveChapter(currentId);
+            isScrolling = false;
+          });
+          isScrolling = true;
+        }
+      }, { passive: true });
+
+      // Click listener
+      chapterLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          const target = link.getAttribute('data-target');
+          if (target) {
+            setActiveChapter(target);
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>
