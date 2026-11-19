@@ -422,6 +422,36 @@
     }
 
     /* 데일리 취업 관제실 위젯 */
+    .daily-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .daily-bar-wrap {
+      flex: 1 1 200px;
+      height: 6px;
+      background: var(--track-bg);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .daily-bar-fill {
+      height: 100%;
+      background: var(--accent-primary);
+      border-radius: 99px;
+      transition: width 0.25s ease;
+    }
+
+    .daily-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+    }
+
     .checklist-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -686,7 +716,8 @@
       .col-4, .col-5, .col-6, .col-7, .col-8 {
         grid-column: span 12;
       }
-      .project-visual-grid {
+      .project-visual-grid,
+      .daily-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
@@ -713,6 +744,7 @@
         font-size: 1.18rem;
       }
       .project-visual-grid,
+      .daily-grid,
       .checklist-grid,
       .bullet-chips,
       .flow-steps {
@@ -862,6 +894,30 @@
 
   <!-- 메인 차트 및 데일리 관제실 그리드 -->
   <main class="dashboard-grid">
+
+    <!-- 오늘의 데일리 취업 미션 (매일 자동 초기화 + 누적 카운트) -->
+    <div class="card col-12 sec-core">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+          오늘의 데일리 취업 미션 (자정 초기화)
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <span class="card-tag" id="dailySummaryTag">0 / 5 완료</span>
+          <span class="card-tag" id="dailyTotalTag">누적 0회</span>
+        </div>
+      </div>
+      <div class="daily-meta-row">
+        <div style="font-size:0.78rem; color:var(--ink-muted); font-weight:700;" id="dailyDateLabel">오늘 미션 0%</div>
+        <div class="daily-bar-wrap"><div class="daily-bar-fill" id="dailyBarFill" style="width:0%;"></div></div>
+      </div>
+      <div class="daily-grid" id="dailyMissionGrid"></div>
+      <div class="add-task-row">
+        <input type="text" id="newDailyInput" class="task-input" placeholder="데일리 미션 추가 (10단어 이내)" maxlength="40" />
+        <button type="button" class="tool-btn" onclick="addDailyMission()">+ 미션 추가</button>
+        <button type="button" class="tool-btn" onclick="resetTodayMissions()">오늘 리셋</button>
+      </div>
+    </div>
 
     <!-- 데일리 체크리스트 카드 -->
     <div class="card col-6 sec-core">
@@ -1210,6 +1266,15 @@
       weeklyHours: 38,
       lastVisitDate: '',
       streak: 1,
+      dailyDate: '',
+      dailyTotalDone: 0,
+      dailyMissions: [
+        { id: 'd1', text: '채용공고 2건 스크랩', done: false },
+        { id: 'd2', text: '게임 1종 분석 메모', done: false },
+        { id: 'd3', text: '포트폴리오 1페이지 개선', done: false },
+        { id: 'd4', text: 'CSTS·BM 기출 20분 학습', done: false },
+        { id: 'd5', text: 'AI 코딩·역기획 실습', done: false }
+      ],
       pipeline: {
         interest: 8,
         applied: 3,
@@ -1230,6 +1295,14 @@
       ]
     };
 
+    function getLocalDateStr() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
     function loadState() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -1239,7 +1312,8 @@
           ...structuredClone(DEFAULT_STATE),
           ...parsed,
           pipeline: { ...DEFAULT_STATE.pipeline, ...(parsed.pipeline || {}) },
-          tasks: Array.isArray(parsed.tasks) && parsed.tasks.length ? parsed.tasks : structuredClone(DEFAULT_STATE.tasks)
+          tasks: Array.isArray(parsed.tasks) && parsed.tasks.length ? parsed.tasks : structuredClone(DEFAULT_STATE.tasks),
+          dailyMissions: Array.isArray(parsed.dailyMissions) && parsed.dailyMissions.length ? parsed.dailyMissions : structuredClone(DEFAULT_STATE.dailyMissions)
         };
       } catch (e) {
         return structuredClone(DEFAULT_STATE);
@@ -1259,18 +1333,77 @@
     }
 
     function updateStreak() {
-      const today = new Date().toISOString().slice(0, 10);
+      const today = getLocalDateStr();
       if (!appState.lastVisitDate) {
         appState.streak = 1;
       } else if (appState.lastVisitDate !== today) {
-        const prev = new Date(appState.lastVisitDate);
-        const curr = new Date(today);
+        const prev = new Date(appState.lastVisitDate + 'T00:00:00');
+        const curr = new Date(today + 'T00:00:00');
         const diffDays = Math.round((curr - prev) / 86400000);
         appState.streak = diffDays === 1 ? appState.streak + 1 : 1;
       }
       appState.lastVisitDate = today;
+      if (appState.dailyDate && appState.dailyDate !== today) {
+        appState.dailyMissions = appState.dailyMissions.map(m => ({ ...m, done: false }));
+      }
+      appState.dailyDate = today;
       saveState();
       document.getElementById('streakBadge').textContent = `연속 ${appState.streak}일 접속`;
+    }
+
+    function renderDailyMissions() {
+      const grid = document.getElementById('dailyMissionGrid');
+      grid.innerHTML = '';
+      let doneCount = 0;
+
+      appState.dailyMissions.forEach((m, idx) => {
+        if (m.done) doneCount++;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'chk-btn' + (m.done ? ' done' : '');
+        btn.onclick = () => toggleDailyMission(idx);
+        btn.innerHTML = `<span>${m.done ? '☑' : '☐'} ${escapeHtml(m.text)}</span><span style="opacity:0.78;">${m.done ? '완료' : '오늘'}</span>`;
+        grid.appendChild(btn);
+      });
+
+      const total = appState.dailyMissions.length || 1;
+      const pct = Math.round((doneCount / total) * 100);
+      const tagEl = document.getElementById('dailySummaryTag');
+      tagEl.textContent = doneCount === total ? `${doneCount} / ${total} 올클리어` : `${doneCount} / ${total} 완료`;
+      tagEl.style.background = doneCount === total ? 'var(--done-bg)' : '';
+      tagEl.style.color = doneCount === total ? 'var(--done-ink)' : '';
+      tagEl.style.borderColor = doneCount === total ? 'var(--done-border)' : '';
+
+      document.getElementById('dailyTotalTag').textContent = `누적 ${appState.dailyTotalDone}회`;
+      document.getElementById('dailyDateLabel').textContent = `${appState.dailyDate} 달성률 ${pct}%`;
+      document.getElementById('dailyBarFill').style.width = pct + '%';
+    }
+
+    function toggleDailyMission(idx) {
+      const next = !appState.dailyMissions[idx].done;
+      appState.dailyMissions[idx].done = next;
+      appState.dailyTotalDone = Math.max(0, appState.dailyTotalDone + (next ? 1 : -1));
+      saveState();
+      renderDailyMissions();
+    }
+
+    function addDailyMission() {
+      const input = document.getElementById('newDailyInput');
+      const val = input.value.trim();
+      if (!val) return;
+      const words = val.split(/\s+/).slice(0, 10).join(' ');
+      appState.dailyMissions.push({ id: 'd_' + Date.now(), text: words, done: false });
+      input.value = '';
+      saveState();
+      renderDailyMissions();
+    }
+
+    function resetTodayMissions() {
+      const checkedToday = appState.dailyMissions.filter(m => m.done).length;
+      appState.dailyTotalDone = Math.max(0, appState.dailyTotalDone - checkedToday);
+      appState.dailyMissions = appState.dailyMissions.map(m => ({ ...m, done: false }));
+      saveState();
+      renderDailyMissions();
     }
 
     function renderChecklist() {
@@ -1455,7 +1588,9 @@
 
     function resetState() {
       appState = structuredClone(DEFAULT_STATE);
-      appState.lastVisitDate = new Date().toISOString().slice(0, 10);
+      const today = getLocalDateStr();
+      appState.lastVisitDate = today;
+      appState.dailyDate = today;
       saveState();
       initUI();
       renderAllCharts();
@@ -1464,6 +1599,7 @@
     function initUI() {
       updateStreak();
       applyTheme();
+      renderDailyMissions();
       renderChecklist();
       renderDday();
       renderPipeline();
@@ -1475,6 +1611,7 @@
     document.addEventListener('keydown', (e) => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
         if (e.key === 'Enter' && e.target.id === 'newTaskInput') addTask();
+        if (e.key === 'Enter' && e.target.id === 'newDailyInput') addDailyMission();
         return;
       }
       const map = { '1': 'all', '2': 'core', '3': 'project' };
