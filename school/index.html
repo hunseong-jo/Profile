@@ -453,6 +453,43 @@
     }
 
     /* 이치방쿠지 보상 미니게임 */
+    .kuji-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #f8fafc;
+      margin-bottom: 12px;
+    }
+
+    body.dark-mode .kuji-banner {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid var(--border-strong);
+    }
+
+    .kuji-banner-title {
+      font-size: 0.84rem;
+      font-weight: 900;
+      letter-spacing: 0.4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .kuji-banner-badge {
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid rgba(251, 191, 36, 0.55);
+      color: #fde68a;
+    }
+
     .kuji-layout {
       display: grid;
       grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
@@ -505,97 +542,221 @@
       cursor: not-allowed;
     }
 
+    @keyframes kujiPop {
+      0% { transform: scale(0.96); opacity: 0.65; }
+      60% { transform: scale(1.02); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
     .kuji-result {
       padding: 12px 14px;
-      border-radius: 10px;
+      border-radius: 12px;
       background: var(--bg-subtle);
       border: 1px solid var(--border-hairline);
       border-left: 4px solid var(--accent-primary);
       margin-bottom: 12px;
-      font-size: 0.84rem;
-      font-weight: 700;
-      color: var(--ink-primary);
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 10px;
+    }
+
+    .kuji-result.animate {
+      animation: kujiPop 0.28s ease;
     }
 
     .kuji-result.rare {
       background: #fffbeb;
-      border-color: #fde68a;
+      border-color: #fcd34d;
       border-left-color: #d97706;
       color: #92400e;
     }
 
     body.dark-mode .kuji-result.rare {
       background: rgba(217, 119, 6, 0.14);
-      border-color: rgba(245, 158, 11, 0.35);
+      border-color: rgba(245, 158, 11, 0.4);
       border-left-color: #f59e0b;
+      color: #fde68a;
+    }
+
+    .kuji-res-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .kuji-res-stamp {
+      min-width: 46px;
+      height: 38px;
+      padding: 0 8px;
+      border-radius: 9px;
+      background: var(--ink-primary);
+      color: var(--bg-surface);
+      font-size: 0.85rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .kuji-res-stamp.gold {
+      background: linear-gradient(135deg, #f59e0b, #b45309);
+      color: #ffffff;
+    }
+
+    .kuji-res-stamp.cobalt {
+      background: var(--accent-primary);
+      color: #ffffff;
+    }
+
+    .kuji-res-stamp.teal {
+      background: var(--accent-teal);
+      color: #ffffff;
+    }
+
+    .kuji-res-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--ink-primary);
+    }
+
+    .kuji-result.rare .kuji-res-title {
+      color: #92400e;
+    }
+
+    body.dark-mode .kuji-result.rare .kuji-res-title {
       color: #fde68a;
     }
 
     .kuji-board {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 8px;
+      gap: 9px;
+      padding: 12px;
+      border-radius: 12px;
+      background: var(--bg-muted);
+      border: 1px dashed var(--border-strong);
     }
 
     .kuji-ticket {
-      padding: 10px 6px;
-      border-radius: 10px;
-      background: var(--bg-subtle);
+      position: relative;
+      padding: 0;
+      border-radius: 9px;
+      background: var(--bg-surface);
       border: 1px solid var(--border-strong);
       color: var(--ink-primary);
       font-family: inherit;
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 2px;
-      min-height: 58px;
-      transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+      align-items: stretch;
+      overflow: hidden;
+      min-height: 64px;
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.05);
+      transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    .kuji-ticket:not(.opened)::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 11px;
+      height: 11px;
+      background: linear-gradient(135deg, var(--bg-muted) 50%, var(--border-strong) 50%);
+      border-top-left-radius: 4px;
     }
 
     .kuji-ticket:hover:not(:disabled) {
       border-color: var(--accent-primary);
-      background: var(--accent-soft);
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(37, 99, 235, 0.14);
     }
 
     .kuji-ticket:disabled {
       cursor: default;
     }
 
-    .kuji-ticket.opened {
-      background: var(--bg-muted);
-      border-color: var(--border-hairline);
+    .kuji-stub {
+      font-size: 0.68rem;
+      font-weight: 800;
       color: var(--ink-muted);
+      background: var(--bg-subtle);
+      padding: 3px 6px;
+      border-bottom: 1.5px dashed var(--border-strong);
+      text-align: center;
+      letter-spacing: 0.3px;
     }
 
-    .kuji-ticket.opened.top-grade {
+    .kuji-flap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 6px 4px;
+      color: var(--accent-primary);
+    }
+
+    .kuji-ticket.opened {
+      background: var(--bg-subtle);
+      border-color: var(--border-hairline);
+      box-shadow: none;
+    }
+
+    .kuji-ticket.opened .kuji-stub {
+      border-bottom-color: var(--border-hairline);
+      opacity: 0.7;
+    }
+
+    .kuji-ticket.opened .kuji-flap {
+      color: var(--ink-muted);
+      font-weight: 900;
+    }
+
+    .kuji-ticket.opened.grade-A {
       background: #fffbeb;
-      border-color: #fcd34d;
+      border-color: #f59e0b;
+    }
+
+    .kuji-ticket.opened.grade-A .kuji-flap {
       color: #b45309;
     }
 
-    body.dark-mode .kuji-ticket.opened.top-grade {
+    .kuji-ticket.opened.grade-B {
+      background: var(--accent-soft);
+      border-color: var(--accent-border);
+    }
+
+    .kuji-ticket.opened.grade-B .kuji-flap {
+      color: var(--accent-primary);
+    }
+
+    .kuji-ticket.opened.grade-C {
+      background: #f0fdfa;
+      border-color: #99f6e4;
+    }
+
+    .kuji-ticket.opened.grade-C .kuji-flap {
+      color: var(--accent-teal);
+    }
+
+    body.dark-mode .kuji-ticket.opened.grade-A {
       background: rgba(217, 119, 6, 0.16);
-      border-color: rgba(245, 158, 11, 0.45);
+      border-color: rgba(245, 158, 11, 0.5);
+    }
+
+    body.dark-mode .kuji-ticket.opened.grade-A .kuji-flap {
       color: #fbbf24;
     }
 
-    .kuji-num {
-      font-size: 0.7rem;
-      color: var(--ink-muted);
-      font-weight: 700;
-    }
-
-    .kuji-grade-txt {
-      font-size: 0.88rem;
-      font-weight: 900;
+    body.dark-mode .kuji-ticket.opened.grade-C {
+      background: rgba(15, 118, 110, 0.18);
+      border-color: rgba(45, 212, 191, 0.45);
     }
 
     .kuji-table {
@@ -611,37 +772,52 @@
       justify-content: space-between;
       gap: 8px;
       padding: 7px 10px;
-      border-radius: 8px;
+      border-radius: 9px;
       background: var(--bg-subtle);
       border: 1px solid var(--border-hairline);
       font-size: 0.78rem;
     }
 
+    .kuji-prize-row.lastone-row {
+      background: #fffbeb;
+      border-color: #fde68a;
+    }
+
+    body.dark-mode .kuji-prize-row.lastone-row {
+      background: rgba(217, 119, 6, 0.12);
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+
     .kuji-prize-row.soldout {
-      opacity: 0.5;
+      opacity: 0.48;
     }
 
     .grade-badge {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 34px;
+      min-width: 38px;
       padding: 2px 7px;
       border-radius: 6px;
-      background: var(--ink-primary);
-      color: var(--bg-surface);
+      background: #475569;
+      color: #ffffff;
       font-size: 0.72rem;
       font-weight: 900;
       flex-shrink: 0;
     }
 
     .grade-badge.gold {
-      background: #d97706;
+      background: linear-gradient(135deg, #f59e0b, #b45309);
       color: #ffffff;
     }
 
     .grade-badge.cobalt {
       background: var(--accent-primary);
+      color: #ffffff;
+    }
+
+    .grade-badge.teal {
+      background: var(--accent-teal);
       color: #ffffff;
     }
 
@@ -719,6 +895,12 @@
       display: flex;
       gap: 8px;
       margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .add-task-row .tool-btn {
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .task-input {
@@ -1162,6 +1344,14 @@
         </div>
       </div>
 
+      <div class="kuji-banner">
+        <div class="kuji-banner-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          ICHIBAN KUJI · 20매 한정 보상 에디션
+        </div>
+        <span class="kuji-banner-badge">꽝 없음 · 마지막 장 라스트원상</span>
+      </div>
+
       <div class="kuji-layout">
         <div>
           <div class="kuji-controls">
@@ -1173,7 +1363,10 @@
           </div>
 
           <div class="kuji-result" id="kujiResultBox">
-            <span id="kujiResultText">티켓을 눌러 보상을 확인하세요</span>
+            <div class="kuji-res-left">
+              <div class="kuji-res-stamp" id="kujiResultStamp">?</div>
+              <div class="kuji-res-title" id="kujiResultText">티켓을 뜯어 보상을 확인하세요</div>
+            </div>
             <span class="card-tag" id="kujiResultSub">미션 완료 시 뽑기권 지급</span>
           </div>
 
@@ -1552,9 +1745,9 @@
       kujiPrizeConfig: [
         { grade: 'A상', total: 1, name: '다음날 하루종일 넷플릭스 보기', tier: 'gold' },
         { grade: 'B상', total: 2, name: '3시간 자유롭게 게임하기', tier: 'cobalt' },
-        { grade: 'C상', total: 3, name: '좋아하는 카페·디저트 간식', tier: 'normal' },
+        { grade: 'C상', total: 3, name: '좋아하는 카페·디저트 간식', tier: 'teal' },
         { grade: 'D상', total: 4, name: '유튜브·음악 1시간 휴식', tier: 'normal' },
-        { grade: 'E상', total: 5, name: '오늘 밤 30분 일찍 취침', tier: 'normal' },
+        { grade: 'E상', total: 5, name: '편의점 최애 간식·음료 1개', tier: 'normal' },
         { grade: 'F상', total: 5, name: '취업 미션 1회 면제권', tier: 'normal' }
       ],
       kujiLastOneName: '주말 하루 완벽 자유 휴식권',
@@ -1600,13 +1793,24 @@
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) return structuredClone(DEFAULT_STATE);
         const parsed = JSON.parse(raw);
-        return {
+        const merged = {
           ...structuredClone(DEFAULT_STATE),
           ...parsed,
           pipeline: { ...DEFAULT_STATE.pipeline, ...(parsed.pipeline || {}) },
           tasks: Array.isArray(parsed.tasks) && parsed.tasks.length ? parsed.tasks : structuredClone(DEFAULT_STATE.tasks),
-          dailyMissions: Array.isArray(parsed.dailyMissions) && parsed.dailyMissions.length ? parsed.dailyMissions : structuredClone(DEFAULT_STATE.dailyMissions)
+          dailyMissions: Array.isArray(parsed.dailyMissions) && parsed.dailyMissions.length ? parsed.dailyMissions : structuredClone(DEFAULT_STATE.dailyMissions),
+          kujiPrizeConfig: Array.isArray(parsed.kujiPrizeConfig) && parsed.kujiPrizeConfig.length === 6 ? parsed.kujiPrizeConfig : structuredClone(DEFAULT_STATE.kujiPrizeConfig),
+          kujiCoupons: Array.isArray(parsed.kujiCoupons) ? parsed.kujiCoupons : []
         };
+        merged.kujiPrizeConfig = merged.kujiPrizeConfig.map(c => {
+          if (c.grade === 'C상' && (!c.tier || c.tier === 'normal')) c = { ...c, tier: 'teal' };
+          if (c.grade === 'E상' && c.name === '오늘 밤 30분 일찍 취침') return { ...c, name: '편의점 최애 간식·음료 1개' };
+          return c;
+        });
+        if (merged.kujiLastResult && merged.kujiLastResult.grade === 'E상' && merged.kujiLastResult.name === '오늘 밤 30분 일찍 취침') {
+          merged.kujiLastResult = { ...merged.kujiLastResult, name: '편의점 최애 간식·음료 1개' };
+        }
+        return merged;
       } catch (e) {
         return structuredClone(DEFAULT_STATE);
       }
@@ -1754,17 +1958,25 @@
       drawBtn.textContent = unopened <= 0 ? '박스 완판 (새 박스 시작)' : '랜덤 1회 뽑기';
 
       const resBox = document.getElementById('kujiResultBox');
+      const resStamp = document.getElementById('kujiResultStamp');
       const resTxt = document.getElementById('kujiResultText');
       const resSub = document.getElementById('kujiResultSub');
       if (appState.kujiLastResult) {
         const r = appState.kujiLastResult;
-        resTxt.textContent = `${r.grade} 당첨! ${r.name}`;
+        resStamp.textContent = r.grade;
+        resStamp.className = 'kuji-res-stamp' + (r.grade === 'A상' || r.lastOne ? ' gold' : (r.grade === 'B상' ? ' cobalt' : (r.grade === 'C상' ? ' teal' : '')));
+        resTxt.textContent = r.name;
         resSub.textContent = r.lastOne ? '라스트원상 동시 획득!' : `#${String(r.num).padStart(2, '0')} 티켓 개봉`;
         resBox.classList.toggle('rare', r.grade === 'A상' || r.grade === 'B상' || r.lastOne);
+        resBox.classList.remove('animate');
+        void resBox.offsetWidth;
+        resBox.classList.add('animate');
       } else {
-        resTxt.textContent = '티켓을 눌러 보상을 확인하세요';
+        resStamp.textContent = '?';
+        resStamp.className = 'kuji-res-stamp';
+        resTxt.textContent = '티켓을 뜯어 보상을 확인하세요';
         resSub.textContent = '미션 완료 시 뽑기권 지급';
-        resBox.classList.remove('rare');
+        resBox.classList.remove('rare', 'animate');
       }
 
       const board = document.getElementById('kujiBoard');
@@ -1772,11 +1984,11 @@
       appState.kujiBoxTickets.forEach((t, idx) => {
         const btn = document.createElement('button');
         btn.type = 'button';
-        const isTop = t.opened && (t.grade === 'A상' || t.grade === 'B상');
-        btn.className = 'kuji-ticket' + (t.opened ? ' opened' : '') + (isTop ? ' top-grade' : '');
+        const gradeCls = t.opened ? ` grade-${t.grade.charAt(0)}` : '';
+        btn.className = 'kuji-ticket' + (t.opened ? ' opened' + gradeCls : '');
         btn.disabled = t.opened || ticketsAvail <= 0;
         btn.onclick = () => pullKujiTicket(idx);
-        btn.innerHTML = `<span class="kuji-num">#${String(t.num).padStart(2, '0')}</span><span class="kuji-grade-txt">${t.opened ? escapeHtml(t.grade) : '뽑기'}</span>`;
+        btn.innerHTML = `<span class="kuji-stub">NO.${String(t.num).padStart(2, '0')}</span><span class="kuji-flap">${t.opened ? escapeHtml(t.grade) : '뜯기 ↗'}</span>`;
         board.appendChild(btn);
       });
 
@@ -1787,7 +1999,7 @@
         const prob = unopened > 0 ? ((rem / unopened) * 100).toFixed(1) : '0.0';
         const row = document.createElement('div');
         row.className = 'kuji-prize-row' + (rem === 0 ? ' soldout' : '');
-        const badgeCls = cfg.tier === 'gold' ? 'gold' : (cfg.tier === 'cobalt' ? 'cobalt' : '');
+        const badgeCls = cfg.tier === 'gold' ? 'gold' : (cfg.tier === 'cobalt' ? 'cobalt' : (cfg.tier === 'teal' ? 'teal' : ''));
         if (kujiEditMode) {
           row.innerHTML = `<span class="grade-badge ${badgeCls}">${cfg.grade}</span><input type="text" class="task-input" style="padding:4px 8px;font-size:0.75rem;" value="${escapeHtml(cfg.name)}" maxlength="30" onchange="updateKujiPrize(${cIdx}, this.value)" /><span style="font-weight:700;">${rem}/${cfg.total}</span>`;
         } else {
@@ -1797,7 +2009,7 @@
       });
 
       const lastRow = document.createElement('div');
-      lastRow.className = 'kuji-prize-row';
+      lastRow.className = 'kuji-prize-row lastone-row';
       if (kujiEditMode) {
         lastRow.innerHTML = `<span class="grade-badge gold">LAST</span><input type="text" class="task-input" style="padding:4px 8px;font-size:0.75rem;" value="${escapeHtml(appState.kujiLastOneName)}" maxlength="30" onchange="updateLastOnePrize(this.value)" /><span style="font-weight:700;">20매 완판</span>`;
       } else {
