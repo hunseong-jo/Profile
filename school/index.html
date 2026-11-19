@@ -1,0 +1,1735 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>조훈성 | 게임기획 취업준비 정량 대시보드</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230f172a'/%3E%3Cpath d='M32 14L14 23l18 9 18-9-18-9zM14 32l18 9 18-9M14 41l18 9 18-9' fill='none' stroke='%23ffffff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <script src="./assets/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg-canvas: #f5f7fa;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f8fafc;
+      --bg-muted: #f1f5f9;
+      --border-hairline: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --ink-primary: #0f172a;
+      --ink-secondary: #334155;
+      --ink-muted: #64748b;
+      --accent-primary: #2563eb;
+      --accent-soft: #eff6ff;
+      --accent-border: #bfdbfe;
+      --accent-teal: #0f766e;
+      --done-bg: #f0fdf4;
+      --done-border: #bbf7d0;
+      --done-ink: #166534;
+      --track-bg: #e2e8f0;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 14px rgba(15, 23, 42, 0.03);
+    }
+
+    body.dark-mode {
+      --bg-canvas: #0d1117;
+      --bg-surface: #161b22;
+      --bg-subtle: #1c222b;
+      --bg-muted: #212834;
+      --border-hairline: #2d333b;
+      --border-strong: #444c56;
+      --ink-primary: #f0f6fc;
+      --ink-secondary: #c9d1d9;
+      --ink-muted: #8b949e;
+      --accent-primary: #58a6ff;
+      --accent-soft: rgba(56, 139, 253, 0.14);
+      --accent-border: rgba(56, 139, 253, 0.35);
+      --accent-teal: #2dd4bf;
+      --done-bg: rgba(46, 160, 67, 0.14);
+      --done-border: rgba(63, 185, 80, 0.4);
+      --done-ink: #7ee787;
+      --track-bg: #2d333b;
+      --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+      background-color: var(--bg-canvas);
+      color: var(--ink-primary);
+      min-height: 100vh;
+      padding: 20px 28px 48px;
+      overflow-x: hidden;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .container {
+      max-width: 1360px;
+      margin: 0 auto;
+    }
+
+    /* 상단 관리 유틸리티 바 */
+    .hub-bar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px 14px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 14px;
+    }
+
+    .hub-tools {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .tool-btn {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      color: var(--ink-secondary);
+      padding: 6px 11px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.76rem;
+      font-weight: 700;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
+
+    .tool-btn:hover,
+    .tool-btn:focus-visible,
+    .tool-btn.active {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      background: var(--accent-soft);
+      outline: none;
+    }
+
+    .streak-pill {
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: var(--done-bg);
+      border: 1px solid var(--done-border);
+      color: var(--done-ink);
+    }
+
+    /* 상단 프로필 헤더 */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 22px 24px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 18px;
+    }
+
+    .profile-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 0;
+      flex: 1 1 320px;
+    }
+
+    .avatar-svg {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: var(--ink-primary);
+      color: var(--bg-surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    body.dark-mode .avatar-svg {
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      color: var(--accent-primary);
+    }
+
+    .title-group {
+      min-width: 0;
+    }
+
+    .title-group h1 {
+      font-size: 1.42rem;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      color: var(--ink-primary);
+      word-break: keep-all;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .chip {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--bg-muted);
+      border: 1px solid var(--border-hairline);
+      color: var(--ink-secondary);
+      font-weight: 700;
+    }
+
+    .chip.highlight {
+      background: var(--accent-soft);
+      border-color: var(--accent-border);
+      color: var(--accent-primary);
+    }
+
+    /* 탭 네비게이션 (Segmented Style) */
+    .nav-tabs {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      background: var(--bg-muted);
+      padding: 4px;
+      border-radius: 11px;
+      border: 1px solid var(--border-hairline);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--ink-muted);
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.84rem;
+      font-weight: 700;
+      font-family: inherit;
+      transition: all 0.16s ease;
+    }
+
+    .tab-btn:hover,
+    .tab-btn:focus-visible {
+      color: var(--ink-primary);
+      outline: none;
+    }
+
+    .tab-btn.active {
+      background: var(--bg-surface);
+      color: var(--ink-primary);
+      border-color: var(--border-hairline);
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+    }
+
+    /* 상단 6대 정량 KPI 카드 */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .kpi-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 0;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.18s ease, transform 0.18s ease;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-strong);
+    }
+
+    .kpi-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .kpi-label {
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+      font-weight: 700;
+    }
+
+    .kpi-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-muted);
+      color: var(--ink-secondary);
+      flex-shrink: 0;
+    }
+
+    .kpi-num {
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: -0.8px;
+      color: var(--ink-primary);
+      margin-bottom: 4px;
+    }
+
+    .kpi-num.accent {
+      color: var(--accent-primary);
+    }
+
+    .kpi-sub {
+      font-size: 0.74rem;
+      color: var(--ink-muted);
+    }
+
+    .progress-mini {
+      height: 5px;
+      width: 100%;
+      background: var(--track-bg);
+      border-radius: 99px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: var(--ink-primary);
+      transition: width 0.35s ease;
+    }
+
+    .progress-fill.accent {
+      background: var(--accent-primary);
+    }
+
+    /* 메인 차트 대시보드 그리드 */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .col-4 { grid-column: span 4; }
+    .col-5 { grid-column: span 5; }
+    .col-6 { grid-column: span 6; }
+    .col-7 { grid-column: span 7; }
+    .col-8 { grid-column: span 8; }
+    .col-12 { grid-column: span 12; }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .card-title {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--ink-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title svg {
+      color: var(--accent-primary);
+      flex-shrink: 0;
+    }
+
+    .card-tag {
+      font-size: 0.72rem;
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: var(--bg-muted);
+      color: var(--ink-secondary);
+      border: 1px solid var(--border-hairline);
+      font-weight: 700;
+    }
+
+    .chart-box {
+      position: relative;
+      width: 100%;
+      height: 260px;
+      min-width: 0;
+    }
+
+    .chart-box.tall {
+      height: 295px;
+    }
+
+    /* 개조식 요약 칩 리스트 (한 줄 10단어 이하) */
+    .bullet-chips {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .b-item {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      border-left: 3px solid var(--accent-primary);
+      padding: 8px 11px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      color: var(--ink-secondary);
+      font-weight: 600;
+      min-width: 0;
+    }
+
+    .b-item.muted {
+      border-left-color: var(--ink-muted);
+    }
+
+    /* 데일리 취업 관제실 위젯 */
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .chk-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      width: 100%;
+      text-align: left;
+      padding: 9px 11px;
+      border-radius: 9px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      color: var(--ink-secondary);
+      font-size: 0.79rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .chk-btn:hover {
+      border-color: var(--border-strong);
+    }
+
+    .chk-btn.done {
+      background: var(--done-bg);
+      border-color: var(--done-border);
+      color: var(--done-ink);
+    }
+
+    .chk-btn:focus-visible {
+      outline: 2px solid var(--accent-primary);
+    }
+
+    .add-task-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .task-input {
+      flex: 1 1 auto;
+      min-width: 0;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-strong);
+      color: var(--ink-primary);
+      border-radius: 8px;
+      padding: 8px 11px;
+      font-size: 0.8rem;
+      font-family: inherit;
+    }
+
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .pipe-box {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      border-radius: 12px;
+      padding: 12px 10px;
+      text-align: center;
+      min-width: 0;
+    }
+
+    .pipe-name {
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+      font-weight: 700;
+    }
+
+    .pipe-val {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--ink-primary);
+      margin: 4px 0;
+    }
+
+    .pipe-ctrl {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .mini-btn {
+      width: 28px;
+      height: 26px;
+      border-radius: 7px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-surface);
+      color: var(--ink-primary);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .mini-btn:hover {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+    }
+
+    .dday-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      font-size: 0.81rem;
+    }
+
+    /* 원형 게이지 4종 */
+    .gauge-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .gauge-box {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      border-radius: 12px;
+      padding: 12px 10px;
+      text-align: center;
+      min-width: 0;
+    }
+
+    .gauge-svg {
+      width: 92px;
+      height: 92px;
+      margin: 0 auto 6px;
+    }
+
+    .gauge-track {
+      stroke: var(--track-bg);
+    }
+
+    .gauge-text {
+      fill: var(--ink-primary);
+    }
+
+    .gauge-title {
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: var(--ink-primary);
+    }
+
+    .gauge-desc {
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+
+    /* 비주얼 프로젝트 쇼케이스 카드 5종 (단정하고 통일된 스튜디오 톤) */
+    .project-visual-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .proj-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .proj-illust {
+      height: 88px;
+      border-radius: 10px;
+      background: var(--bg-muted);
+      border: 1px solid var(--border-hairline);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .proj-metric-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      padding: 7px 9px;
+      border-radius: 8px;
+      font-size: 0.74rem;
+      color: var(--ink-muted);
+    }
+
+    .proj-metric-row strong {
+      text-align: right;
+      color: var(--ink-primary);
+    }
+
+    /* 타임라인 플로우 */
+    .flow-steps {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .step-node {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      border-top: 3px solid var(--accent-primary);
+      border-radius: 10px;
+      padding: 11px 9px;
+      text-align: center;
+      min-width: 0;
+    }
+
+    .step-year {
+      font-size: 0.72rem;
+      color: var(--accent-primary);
+      font-weight: 800;
+    }
+
+    .step-name {
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: var(--ink-primary);
+      margin: 4px 0;
+    }
+
+    .step-stat {
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+    }
+
+    .hidden-section {
+      display: none !important;
+    }
+
+    /* 반응형 브레이크포인트 */
+    @media (max-width: 1280px) {
+      .kpi-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .project-visual-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .col-4, .col-5, .col-6, .col-7, .col-8 {
+        grid-column: span 12;
+      }
+      .project-visual-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      .kpi-grid,
+      .gauge-grid,
+      .pipeline-grid,
+      .flow-steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 12px 12px 36px;
+      }
+      .header,
+      .card,
+      .hub-bar {
+        padding: 14px;
+      }
+      .title-group h1 {
+        font-size: 1.18rem;
+      }
+      .project-visual-grid,
+      .checklist-grid,
+      .bullet-chips,
+      .flow-steps {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding: 10px;
+      }
+      .hub-bar, .nav-tabs, .add-task-row, .pipe-ctrl {
+        display: none !important;
+      }
+      .card, .kpi-card {
+        break-inside: avoid;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 상단 관리 유틸리티 바 -->
+  <nav class="hub-bar" aria-label="관리 도구">
+    <div class="hub-tools">
+      <span class="streak-pill" id="streakBadge">연속 1일 접속</span>
+      <button type="button" class="tool-btn" id="themeBtn" onclick="toggleTheme()">다크 모드</button>
+      <button type="button" class="tool-btn" onclick="window.print()">인쇄 PDF</button>
+      <button type="button" class="tool-btn" onclick="exportState()">백업 JSON</button>
+      <button type="button" class="tool-btn" onclick="document.getElementById('importFile').click()">복원</button>
+      <button type="button" class="tool-btn" onclick="resetState()">초기화</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importState(event)" />
+    </div>
+  </nav>
+
+  <!-- 상단 프로필 헤더 -->
+  <header class="header">
+    <div class="profile-wrap">
+      <div class="avatar-svg" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <div class="title-group">
+        <h1>조훈성 게임기획 취업준비 정량 대시보드</h1>
+        <div class="badge-row">
+          <span class="chip">유한대 게임콘텐츠전공</span>
+          <span class="chip">학번 202227069</span>
+          <span class="chip highlight">모의입사 우수상</span>
+          <span class="chip">STOVE 출시 · CSTS 94.6%</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav-tabs" aria-label="대시보드 필터 (단축키 1~3)">
+      <button type="button" class="tab-btn active" data-tab="all" aria-pressed="true" onclick="filterSection('all', this)">1. 전체 뷰</button>
+      <button type="button" class="tab-btn" data-tab="core" aria-pressed="false" onclick="filterSection('core', this)">2. 관제·역량</button>
+      <button type="button" class="tab-btn" data-tab="project" aria-pressed="false" onclick="filterSection('project', this)">3. 프로젝트·QA</button>
+    </nav>
+  </header>
+
+  <!-- 6대 핵심 정량 KPI 카드 -->
+  <section class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-top">
+        <span class="kpi-label">구축 프로젝트</span>
+        <div class="kpi-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="4"/><path d="M6 12h4M8 10v4M15 11h.01M18 13h.01"/></svg>
+        </div>
+      </div>
+      <div class="kpi-num">5건</div>
+      <div class="kpi-sub">STOVE 출시·로블록스 포함</div>
+      <div class="progress-mini"><div class="progress-fill" style="width:100%;"></div></div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-top">
+        <span class="kpi-label">검증 QA 해결</span>
+        <div class="kpi-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+      </div>
+      <div class="kpi-num">191건</div>
+      <div class="kpi-sub">크래시·컴파일 에러 0건</div>
+      <div class="progress-mini"><div class="progress-fill" style="width:100%;"></div></div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-top">
+        <span class="kpi-label">취득 자격증</span>
+        <div class="kpi-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+        </div>
+      </div>
+      <div class="kpi-num">6종</div>
+      <div class="kpi-sub">OA 3종 + 기계 3종</div>
+      <div class="progress-mini"><div class="progress-fill" style="width:100%;"></div></div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-top">
+        <span class="kpi-label">CSTS 수험 진도</span>
+        <div class="kpi-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+      </div>
+      <div class="kpi-num">94.6%</div>
+      <div class="kpi-sub">35/37단원 · 1,670분 학습</div>
+      <div class="progress-mini"><div class="progress-fill" style="width:94.6%;"></div></div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-top">
+        <span class="kpi-label">성실·수상 지표</span>
+        <div class="kpi-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+        </div>
+      </div>
+      <div class="kpi-num">12년</div>
+      <div class="kpi-sub">개근 · 모의입사 우수상</div>
+      <div class="progress-mini"><div class="progress-fill" style="width:100%;"></div></div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-top">
+        <span class="kpi-label">실시간 준비율</span>
+        <div class="kpi-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+      </div>
+      <div class="kpi-num accent" id="kpiReadyNum">80%</div>
+      <div class="kpi-sub" id="kpiReadySub">체크 8/10건 완료</div>
+      <div class="progress-mini"><div class="progress-fill accent" id="kpiReadyBar" style="width:80%;"></div></div>
+    </div>
+  </section>
+
+  <!-- 메인 차트 및 데일리 관제실 그리드 -->
+  <main class="dashboard-grid">
+
+    <!-- 데일리 체크리스트 카드 -->
+    <div class="card col-6 sec-core">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          취업 준비 마일스톤 (실시간 저장)
+        </div>
+        <span class="card-tag" id="checkSummaryTag">8 / 10 완료</span>
+      </div>
+      <div class="dday-bar">
+        <div>
+          <strong style="color:var(--accent-primary);" id="ddayLabel">D-29</strong>
+          <span style="color:var(--ink-muted); margin-left:6px;">목표 마감일</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <input type="date" id="targetDateInput" class="task-input" style="padding:4px 8px; width:auto;" onchange="updateTargetDate(this.value)" aria-label="목표 날짜 선택" />
+        </div>
+      </div>
+      <div class="checklist-grid" id="checklistContainer"></div>
+      <div class="add-task-row">
+        <input type="text" id="newTaskInput" class="task-input" placeholder="새 목표 추가 (10단어 이내)" maxlength="40" />
+        <button type="button" class="tool-btn" onclick="addTask()">+ 추가</button>
+      </div>
+    </div>
+
+    <!-- 지원 파이프라인 & 주간 학습 트래커 -->
+    <div class="card col-6 sec-core">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg>
+          지원 현황 &amp; 주간 준비 트래커
+        </div>
+        <span class="card-tag">원클릭 실시간 증감</span>
+      </div>
+      <div class="pipeline-grid" id="pipelineGrid"></div>
+      <div class="dday-bar">
+        <div>
+          <strong style="color:var(--accent-primary);" id="weeklyHoursText">이번 주 38h / 50h</strong>
+          <span style="color:var(--ink-muted); margin-left:6px;">집중 준비 시간</span>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button type="button" class="mini-btn" onclick="adjustHours(-1)">-1</button>
+          <button type="button" class="mini-btn" onclick="adjustHours(1)">+1</button>
+          <button type="button" class="mini-btn" style="width:auto; padding:0 8px;" onclick="adjustHours(5)">+5h</button>
+        </div>
+      </div>
+      <div class="chart-box" style="height:175px;">
+        <canvas id="pipelineChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Chart 1: 6대 기획 역량 레이더 차트 -->
+    <div class="card col-5 sec-core">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
+          6대 핵심 역량 레이더
+        </div>
+        <span class="card-tag">목표 100% 대비 자가진단</span>
+      </div>
+      <div class="chart-box tall">
+        <canvas id="radarChart"></canvas>
+      </div>
+      <div class="bullet-chips">
+        <div class="b-item">시스템 설계: 92%</div>
+        <div class="b-item">코드 대조 QA: 96%</div>
+        <div class="b-item muted">AI 구현: 92%</div>
+        <div class="b-item muted">팀 리더십: 94%</div>
+      </div>
+    </div>
+
+    <!-- Chart 2: 프로젝트별 정량 성과 복합 그래프 -->
+    <div class="card col-7 sec-project">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 16V10M12 16V7M16 16v-4"/></svg>
+          프로젝트 5종 검증 지표
+        </div>
+        <span class="card-tag">좌: QA 건수 · 우: 완성도(%)</span>
+      </div>
+      <div class="chart-box tall">
+        <canvas id="projectBarChart"></canvas>
+      </div>
+      <div class="bullet-chips">
+        <div class="b-item">Pill Agents: 88p · QA 39건</div>
+        <div class="b-item">쥐독한 등반: 끼임 32건 해결</div>
+        <div class="b-item muted">샐러드팜: AI 추론 0.08초</div>
+        <div class="b-item muted">백색소음 20건 · 로블록스 100건</div>
+      </div>
+    </div>
+
+    <!-- 비주얼 프로젝트 쇼케이스 카드 5종 (단정한 톤 통일) -->
+    <div class="card col-12 sec-project">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          대표 프로젝트 5종 정량 요약
+        </div>
+        <span class="card-tag">5대 실전 파이프라인</span>
+      </div>
+      <div class="project-visual-grid">
+        <div class="proj-card">
+          <div class="proj-illust">
+            <svg width="46" height="46" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+              <rect x="12" y="22" width="40" height="20" rx="10" stroke="#2563eb" stroke-width="3" fill="rgba(37,99,235,0.08)"/>
+              <path d="M32 22V42" stroke="#2563eb" stroke-width="3"/>
+              <circle cx="22" cy="32" r="3" fill="#2563eb"/>
+              <circle cx="42" cy="32" r="3" fill="#0f766e"/>
+            </svg>
+          </div>
+          <div class="gauge-title">《Pill Agents》</div>
+          <div class="proj-metric-row"><span>역할</span><strong>4인 팀장·기획</strong></div>
+          <div class="proj-metric-row"><span>기획 볼륨</span><strong>최신 88p · 도구 6종</strong></div>
+          <div class="proj-metric-row"><span>QA 성과</span><strong>전수 교정 39건+</strong></div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-illust">
+            <svg width="46" height="46" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+              <polygon points="32,12 52,48 12,48" stroke="#2563eb" stroke-width="3" fill="rgba(37,99,235,0.08)"/>
+              <circle cx="32" cy="28" r="4" fill="#0f766e"/>
+              <path d="M22 48L32 34L42 48" stroke="#2563eb" stroke-width="2.5"/>
+            </svg>
+          </div>
+          <div class="gauge-title">《쥐독한 등반》</div>
+          <div class="proj-metric-row"><span>출시 성과</span><strong>STOVE 인디 출시</strong></div>
+          <div class="proj-metric-row"><span>물리 정밀</span><strong>0.01초 단위 판정</strong></div>
+          <div class="proj-metric-row"><span>QA 성과</span><strong>끼임 32건·크래시 0</strong></div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-illust">
+            <svg width="46" height="46" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+              <circle cx="32" cy="35" r="15" stroke="#0f766e" stroke-width="3" fill="rgba(15,118,110,0.08)"/>
+              <path d="M32 20C32 14 40 12 42 18" stroke="#0f766e" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="27" cy="33" r="2.2" fill="#0f766e"/>
+              <circle cx="37" cy="33" r="2.2" fill="#0f766e"/>
+            </svg>
+          </div>
+          <div class="gauge-title">《나의 작은 샐러드팜》</div>
+          <div class="proj-metric-row"><span>개발 방식</span><strong>AI 1인 풀사이클</strong></div>
+          <div class="proj-metric-row"><span>온디바이스</span><strong>Sentis 0.08초·96.4%</strong></div>
+          <div class="proj-metric-row"><span>콘텐츠</span><strong>도트 크리처 32종</strong></div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-illust">
+            <svg width="46" height="46" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+              <path d="M14 48H26V38H38V28H50" stroke="#2563eb" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="44" cy="18" r="4.5" stroke="#0f766e" stroke-width="2.8"/>
+            </svg>
+          </div>
+          <div class="gauge-title">《백색소음》</div>
+          <div class="proj-metric-row"><span>서사 볼륨</span><strong>31챕터 · 1,103라인</strong></div>
+          <div class="proj-metric-row"><span>오디오·연출</span><strong>3성부 왈츠·엔딩</strong></div>
+          <div class="proj-metric-row"><span>QA 성과</span><strong>스토리 20건·에러 0</strong></div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-illust">
+            <svg width="46" height="46" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+              <rect x="16" y="16" width="32" height="32" rx="6" stroke="#2563eb" stroke-width="3" fill="rgba(37,99,235,0.08)"/>
+              <rect x="26" y="26" width="12" height="12" rx="2" fill="#0f766e"/>
+            </svg>
+          </div>
+          <div class="gauge-title">《로블록스 MVP 2종》</div>
+          <div class="proj-metric-row"><span>유치원 타이쿤</span><strong>300명세 · v83 패치</strong></div>
+          <div class="proj-metric-row"><span>어부바 오비</span><strong>100층 · E2E 10/10</strong></div>
+          <div class="proj-metric-row"><span>QA 성과</span><strong>100대 엣지 패치</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart 3: QA 결함 해결 191건 일치 분포 -->
+    <div class="card col-4 sec-project">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6.5 3.5"/></svg>
+          검증 QA 191건 분포
+        </div>
+        <span class="card-tag">프로젝트별 실측 합계</span>
+      </div>
+      <div class="chart-box">
+        <canvas id="qaDoughnutChart"></canvas>
+      </div>
+      <div class="bullet-chips">
+        <div class="b-item">로블록스 엣지: 100건</div>
+        <div class="b-item">기획·빌드 대조: 39건</div>
+        <div class="b-item muted">물리·끼임 버그: 32건</div>
+        <div class="b-item muted">내러티브 무결성: 20건</div>
+      </div>
+    </div>
+
+    <!-- Chart 4: 자격증·수상·툴체인 근거 차트 -->
+    <div class="card col-4 sec-core">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          실무 툴체인 (자가 진단)
+        </div>
+        <span class="card-tag">기획 + 코드 해독</span>
+      </div>
+      <div class="chart-box">
+        <canvas id="toolHorizChart"></canvas>
+      </div>
+      <div class="bullet-chips">
+        <div class="b-item">C#·Luau 코드 해독</div>
+        <div class="b-item">Unity 366스크립트 대조</div>
+        <div class="b-item muted">OA·기계 자격 6종</div>
+        <div class="b-item muted">CSTS FL 94.6% 완주</div>
+      </div>
+    </div>
+
+    <!-- Chart 5: 주간 취업 준비 배분 -->
+    <div class="card col-4 sec-core">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          주간 준비 시간 배분
+        </div>
+        <span class="card-tag">주 50h 목표 루틴</span>
+      </div>
+      <div class="chart-box">
+        <canvas id="timePieChart"></canvas>
+      </div>
+      <div class="bullet-chips">
+        <div class="b-item">시스템·BM 문서: 30%</div>
+        <div class="b-item">엔진 구현: 25%</div>
+        <div class="b-item muted">코드 대조 QA: 25%</div>
+        <div class="b-item muted">기업·CSTS 학습: 20%</div>
+      </div>
+    </div>
+
+    <!-- Chart 6: 연도별 역량 성장 곡선 + 5단계 마일스톤 -->
+    <div class="card col-7 sec-core">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>
+          성장 로드맵 (추이 요약)
+        </div>
+        <span class="card-tag">기계과 도면 ➔ 게임기획</span>
+      </div>
+      <div class="chart-box">
+        <canvas id="growthLineChart"></canvas>
+      </div>
+      <div class="flow-steps">
+        <div class="step-node">
+          <div class="step-year">고교 3년</div>
+          <div class="step-name">정밀 기계과</div>
+          <div class="step-stat">기계자격 3종·개근</div>
+        </div>
+        <div class="step-node">
+          <div class="step-year">대학 1~2년</div>
+          <div class="step-name">협업·OA</div>
+          <div class="step-stat">밴드 4년·OA 3종</div>
+        </div>
+        <div class="step-node">
+          <div class="step-year">2026 상반기</div>
+          <div class="step-name">출시·AI</div>
+          <div class="step-stat">STOVE·Sentis 구현</div>
+        </div>
+        <div class="step-node">
+          <div class="step-year">2026 하반기</div>
+          <div class="step-name">수상·QA</div>
+          <div class="step-stat">모의입사 우수·TBI</div>
+        </div>
+        <div class="step-node">
+          <div class="step-year">2027 목표</div>
+          <div class="step-name">현업 투입</div>
+          <div class="step-stat">시스템·QA 기획자</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart 7: 직무별 준비도 게이지 4종 (통일된 블루·슬레이트 링) -->
+    <div class="card col-5 sec-core">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>
+          직무별 준비도 (근거 기반)
+        </div>
+        <span class="card-tag">자격·수상·산출물 연계</span>
+      </div>
+      <div class="gauge-grid">
+        <div class="gauge-box">
+          <svg class="gauge-svg" viewBox="0 0 36 36">
+            <path class="gauge-track" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3"/>
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#2563eb" stroke-width="3" stroke-dasharray="92, 100" stroke-linecap="round"/>
+            <text class="gauge-text" x="18" y="20.5" font-size="7.5" font-weight="800" text-anchor="middle">92%</text>
+          </svg>
+          <div class="gauge-title">시스템 기획</div>
+          <div class="gauge-desc">88p·300명세 작성</div>
+        </div>
+
+        <div class="gauge-box">
+          <svg class="gauge-svg" viewBox="0 0 36 36">
+            <path class="gauge-track" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3"/>
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#3b82f6" stroke-width="3" stroke-dasharray="90, 100" stroke-linecap="round"/>
+            <text class="gauge-text" x="18" y="20.5" font-size="7.5" font-weight="800" text-anchor="middle">90%</text>
+          </svg>
+          <div class="gauge-title">레벨·전투</div>
+          <div class="gauge-desc">STOVE·TPS·오비</div>
+        </div>
+
+        <div class="gauge-box">
+          <svg class="gauge-svg" viewBox="0 0 36 36">
+            <path class="gauge-track" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3"/>
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#0f766e" stroke-width="3" stroke-dasharray="95, 100" stroke-linecap="round"/>
+            <text class="gauge-text" x="18" y="20.5" font-size="7.5" font-weight="800" text-anchor="middle">95%</text>
+          </svg>
+          <div class="gauge-title">테크니컬 QA</div>
+          <div class="gauge-desc">191건·CSTS 94.6%</div>
+        </div>
+
+        <div class="gauge-box">
+          <svg class="gauge-svg" viewBox="0 0 36 36">
+            <path class="gauge-track" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3"/>
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#475569" stroke-width="3" stroke-dasharray="88, 100" stroke-linecap="round"/>
+            <text class="gauge-text" x="18" y="20.5" font-size="7.5" font-weight="800" text-anchor="middle">88%</text>
+          </svg>
+          <div class="gauge-title">BM·경제</div>
+          <div class="gauge-desc">운빨·원신 IAP·EV</div>
+        </div>
+      </div>
+
+      <div class="bullet-chips" style="margin-top:16px;">
+        <div class="b-item">모의입사 경진대회 우수상</div>
+        <div class="b-item">경기도 TBI 본선 참가</div>
+        <div class="b-item muted">점프업 35시간 이수</div>
+        <div class="b-item muted">공차 0.01mm 설계 철학</div>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+  <script>
+    const STORAGE_KEY = 'jhs_career_hub_v3';
+
+    const DEFAULT_STATE = {
+      activeTab: 'all',
+      darkMode: false,
+      targetDate: '2026-12-18',
+      weeklyHours: 38,
+      lastVisitDate: '',
+      streak: 1,
+      pipeline: {
+        interest: 8,
+        applied: 3,
+        interview: 1,
+        passed: 1
+      },
+      tasks: [
+        { id: 't1', text: 'STOVE 정식 출시', done: true },
+        { id: 't2', text: 'Pill Agents 88p 완성', done: true },
+        { id: 't3', text: '샐러드팜 AI 구현', done: true },
+        { id: 't4', text: '백색소음 31챕터 완결', done: true },
+        { id: 't5', text: '모의입사 경진대회 우수상', done: true },
+        { id: 't6', text: '공인 자격 6종 취득', done: true },
+        { id: 't7', text: '원신 IAP 웹 기획서', done: true },
+        { id: 't8', text: '로블록스 MVP 2종', done: true },
+        { id: 't9', text: 'CSTS FL 응시 완료', done: false },
+        { id: 't10', text: '통합 포폴 PDF 마감', done: false }
+      ]
+    };
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return structuredClone(DEFAULT_STATE);
+        const parsed = JSON.parse(raw);
+        return {
+          ...structuredClone(DEFAULT_STATE),
+          ...parsed,
+          pipeline: { ...DEFAULT_STATE.pipeline, ...(parsed.pipeline || {}) },
+          tasks: Array.isArray(parsed.tasks) && parsed.tasks.length ? parsed.tasks : structuredClone(DEFAULT_STATE.tasks)
+        };
+      } catch (e) {
+        return structuredClone(DEFAULT_STATE);
+      }
+    }
+
+    let appState = loadState();
+    let chartInstances = [];
+    let pipelineChartInstance = null;
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (e) {
+        // Ignore storage errors
+      }
+    }
+
+    function updateStreak() {
+      const today = new Date().toISOString().slice(0, 10);
+      if (!appState.lastVisitDate) {
+        appState.streak = 1;
+      } else if (appState.lastVisitDate !== today) {
+        const prev = new Date(appState.lastVisitDate);
+        const curr = new Date(today);
+        const diffDays = Math.round((curr - prev) / 86400000);
+        appState.streak = diffDays === 1 ? appState.streak + 1 : 1;
+      }
+      appState.lastVisitDate = today;
+      saveState();
+      document.getElementById('streakBadge').textContent = `연속 ${appState.streak}일 접속`;
+    }
+
+    function renderChecklist() {
+      const container = document.getElementById('checklistContainer');
+      container.innerHTML = '';
+      let doneCount = 0;
+
+      appState.tasks.forEach((task, idx) => {
+        if (task.done) doneCount++;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'chk-btn' + (task.done ? ' done' : '');
+        btn.onclick = () => toggleTask(idx);
+        btn.innerHTML = `<span>${task.done ? '☑' : '☐'} ${escapeHtml(task.text)}</span><span style="opacity:0.78;">${task.done ? '완료' : '대기'}</span>`;
+        container.appendChild(btn);
+      });
+
+      const total = appState.tasks.length || 1;
+      const pct = Math.round((doneCount / total) * 100);
+      document.getElementById('kpiReadyNum').textContent = pct + '%';
+      document.getElementById('kpiReadySub').textContent = `체크 ${doneCount}/${total}건 완료`;
+      document.getElementById('kpiReadyBar').style.width = pct + '%';
+      document.getElementById('checkSummaryTag').textContent = `${doneCount} / ${total} 완료`;
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, s => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[s]));
+    }
+
+    function toggleTask(idx) {
+      appState.tasks[idx].done = !appState.tasks[idx].done;
+      saveState();
+      renderChecklist();
+    }
+
+    function addTask() {
+      const input = document.getElementById('newTaskInput');
+      const val = input.value.trim();
+      if (!val) return;
+      const words = val.split(/\s+/).slice(0, 10).join(' ');
+      appState.tasks.push({ id: 't_' + Date.now(), text: words, done: false });
+      input.value = '';
+      saveState();
+      renderChecklist();
+    }
+
+    function renderDday() {
+      const input = document.getElementById('targetDateInput');
+      input.value = appState.targetDate;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const target = new Date(appState.targetDate + 'T00:00:00');
+      const diff = Math.round((target - today) / 86400000);
+      const el = document.getElementById('ddayLabel');
+      if (isNaN(diff)) {
+        el.textContent = 'D-Day';
+      } else if (diff > 0) {
+        el.textContent = `D-${diff}`;
+      } else if (diff === 0) {
+        el.textContent = 'D-DAY';
+      } else {
+        el.textContent = `D+${Math.abs(diff)}`;
+      }
+    }
+
+    function updateTargetDate(val) {
+      if (!val) return;
+      appState.targetDate = val;
+      saveState();
+      renderDday();
+    }
+
+    function renderPipeline() {
+      const labels = [
+        { key: 'interest', name: '관심 기업' },
+        { key: 'applied', name: '서류 지원' },
+        { key: 'interview', name: '면접 진행' },
+        { key: 'passed', name: '수상·합격' }
+      ];
+      const grid = document.getElementById('pipelineGrid');
+      grid.innerHTML = '';
+      labels.forEach(item => {
+        const box = document.createElement('div');
+        box.className = 'pipe-box';
+        box.innerHTML = `
+          <div class="pipe-name">${item.name}</div>
+          <div class="pipe-val">${appState.pipeline[item.key]}</div>
+          <div class="pipe-ctrl">
+            <button type="button" class="mini-btn" onclick="adjustPipe('${item.key}', -1)">-</button>
+            <button type="button" class="mini-btn" onclick="adjustPipe('${item.key}', 1)">+</button>
+          </div>
+        `;
+        grid.appendChild(box);
+      });
+
+      document.getElementById('weeklyHoursText').textContent = `이번 주 ${appState.weeklyHours}h / 50h`;
+      if (pipelineChartInstance) {
+        pipelineChartInstance.data.datasets[0].data = [
+          appState.pipeline.interest,
+          appState.pipeline.applied,
+          appState.pipeline.interview,
+          appState.pipeline.passed
+        ];
+        pipelineChartInstance.update();
+      }
+    }
+
+    function adjustPipe(key, delta) {
+      appState.pipeline[key] = Math.max(0, appState.pipeline[key] + delta);
+      saveState();
+      renderPipeline();
+    }
+
+    function adjustHours(delta) {
+      appState.weeklyHours = Math.max(0, Math.min(120, appState.weeklyHours + delta));
+      saveState();
+      renderPipeline();
+    }
+
+    function toggleTheme() {
+      appState.darkMode = !appState.darkMode;
+      applyTheme();
+      saveState();
+      renderAllCharts();
+    }
+
+    function applyTheme() {
+      document.body.classList.toggle('dark-mode', appState.darkMode);
+      const btn = document.getElementById('themeBtn');
+      btn.classList.toggle('active', appState.darkMode);
+      btn.textContent = appState.darkMode ? '라이트 모드' : '다크 모드';
+    }
+
+    function filterSection(type, btn) {
+      appState.activeTab = type;
+      saveState();
+
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        const isTarget = b.dataset.tab === type || b === btn;
+        b.classList.toggle('active', isTarget);
+        b.setAttribute('aria-pressed', isTarget ? 'true' : 'false');
+      });
+
+      const cards = document.querySelectorAll('.dashboard-grid .card');
+      cards.forEach(card => {
+        if (type === 'all' || card.classList.contains('sec-' + type)) {
+          card.classList.remove('hidden-section');
+        } else {
+          card.classList.add('hidden-section');
+        }
+      });
+    }
+
+    function exportState() {
+      const blob = new Blob([JSON.stringify(appState, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `취업준비_백업_${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importState(evt) {
+      const file = evt.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const imported = JSON.parse(reader.result);
+          appState = { ...structuredClone(DEFAULT_STATE), ...imported };
+          saveState();
+          initUI();
+          renderAllCharts();
+        } catch (e) {
+          alert('올바른 JSON 백업 파일이 아닙니다.');
+        }
+      };
+      reader.readAsText(file);
+      evt.target.value = '';
+    }
+
+    function resetState() {
+      appState = structuredClone(DEFAULT_STATE);
+      appState.lastVisitDate = new Date().toISOString().slice(0, 10);
+      saveState();
+      initUI();
+      renderAllCharts();
+    }
+
+    function initUI() {
+      updateStreak();
+      applyTheme();
+      renderChecklist();
+      renderDday();
+      renderPipeline();
+      const validTab = ['all', 'core', 'project'].includes(appState.activeTab) ? appState.activeTab : 'all';
+      const targetBtn = document.querySelector(`.tab-btn[data-tab="${validTab}"]`);
+      filterSection(validTab, targetBtn);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        if (e.key === 'Enter' && e.target.id === 'newTaskInput') addTask();
+        return;
+      }
+      const map = { '1': 'all', '2': 'core', '3': 'project' };
+      if (map[e.key]) {
+        const btn = document.querySelector(`.tab-btn[data-tab="${map[e.key]}"]`);
+        filterSection(map[e.key], btn);
+      }
+    });
+
+    function renderAllCharts() {
+      if (typeof Chart === 'undefined') {
+        document.querySelectorAll('.chart-box').forEach(box => {
+          box.innerHTML = '<div style="padding:14px;color:var(--ink-muted);font-size:0.8rem;">차트 파일(./assets/chart.umd.min.js) 없음</div>';
+        });
+        return;
+      }
+
+      chartInstances.forEach(inst => inst.destroy());
+      chartInstances = [];
+
+      const isDark = appState.darkMode;
+      const textCol = isDark ? '#c9d1d9' : '#334155';
+      const labelStrong = isDark ? '#f0f6fc' : '#0f172a';
+      const gridCol = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(15,23,42,0.07)';
+      const primary = isDark ? '#58a6ff' : '#2563eb';
+      const secondary = isDark ? '#2dd4bf' : '#0f766e';
+      const slateDeep = isDark ? '#94a3b8' : '#1e293b';
+      const slateMid = isDark ? '#64748b' : '#64748b';
+      const slateSoft = isDark ? '#475569' : '#94a3b8';
+
+      Chart.defaults.color = textCol;
+      Chart.defaults.font.family = "'Malgun Gothic', sans-serif";
+
+      pipelineChartInstance = new Chart(document.getElementById('pipelineChart'), {
+        type: 'bar',
+        data: {
+          labels: ['관심 기업', '서류 지원', '면접 진행', '수상·합격'],
+          datasets: [{
+            label: '진행 건수',
+            data: [appState.pipeline.interest, appState.pipeline.applied, appState.pipeline.interview, appState.pipeline.passed],
+            backgroundColor: [slateDeep, primary, secondary, slateMid],
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: gridCol } },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+      chartInstances.push(pipelineChartInstance);
+
+      chartInstances.push(new Chart(document.getElementById('radarChart'), {
+        type: 'radar',
+        data: {
+          labels: ['시스템 설계', '레벨·전투', '코드 대조 QA', 'BM·경제', 'AI 구현', '팀 리더십'],
+          datasets: [
+            {
+              label: '본인 현재 수준(자가진단)',
+              data: [92, 90, 96, 88, 92, 94],
+              backgroundColor: isDark ? 'rgba(88, 166, 255, 0.22)' : 'rgba(37, 99, 235, 0.16)',
+              borderColor: primary,
+              pointBackgroundColor: primary,
+              borderWidth: 2.2
+            },
+            {
+              label: '목표 기준선 (100%)',
+              data: [100, 100, 100, 100, 100, 100],
+              backgroundColor: 'transparent',
+              borderColor: slateSoft,
+              borderDash: [4, 4],
+              borderWidth: 1.5
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              min: 40,
+              max: 100,
+              ticks: { display: false },
+              grid: { color: gridCol },
+              angleLines: { color: gridCol },
+              pointLabels: { color: labelStrong, font: { size: 12, weight: 'bold' } }
+            }
+          }
+        }
+      }));
+
+      chartInstances.push(new Chart(document.getElementById('projectBarChart'), {
+        type: 'bar',
+        data: {
+          labels: ['Pill Agents', '쥐독한 등반', '샐러드팜', '백색소음', '로블록스 2종'],
+          datasets: [
+            {
+              label: 'QA·버그 해결 (건)',
+              data: [39, 32, 0, 20, 100],
+              yAxisID: 'y',
+              backgroundColor: primary,
+              borderRadius: 5
+            },
+            {
+              label: '핵심 볼륨 (p·종·챕터)',
+              data: [88, 1, 32, 31, 10],
+              yAxisID: 'y',
+              backgroundColor: slateSoft,
+              borderRadius: 5
+            },
+            {
+              label: '구현 완성도 (%)',
+              data: [95, 100, 96, 100, 95],
+              yAxisID: 'y1',
+              type: 'line',
+              borderColor: secondary,
+              backgroundColor: secondary,
+              borderWidth: 2.8,
+              tension: 0.3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              type: 'linear',
+              position: 'left',
+              min: 0,
+              max: 110,
+              grid: { color: gridCol },
+              title: { display: true, text: '건수 · 볼륨' }
+            },
+            y1: {
+              type: 'linear',
+              position: 'right',
+              min: 60,
+              max: 105,
+              grid: { drawOnChartArea: false },
+              title: { display: true, text: '완성도 (%)' }
+            },
+            x: { grid: { display: false } }
+          }
+        }
+      }));
+
+      chartInstances.push(new Chart(document.getElementById('qaDoughnutChart'), {
+        type: 'doughnut',
+        data: {
+          labels: ['로블록스 엣지 (100)', '기획·빌드 대조 (39)', '물리·끼임 버그 (32)', '내러티브 무결성 (20)'],
+          datasets: [{
+            data: [100, 39, 32, 20],
+            backgroundColor: [primary, secondary, slateDeep, slateSoft],
+            borderWidth: 2,
+            borderColor: isDark ? '#161b22' : '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '64%',
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 11 } }
+          }
+        }
+      }));
+
+      chartInstances.push(new Chart(document.getElementById('toolHorizChart'), {
+        type: 'bar',
+        data: {
+          labels: ['데이터·밸런스 표', 'Roblox Luau', 'AI 바이브 코딩', 'Unity / C# 해독', 'Python 자동검증'],
+          datasets: [{
+            label: '자가 평가 (%)',
+            data: [95, 92, 92, 90, 88],
+            backgroundColor: [primary, primary, secondary, slateDeep, slateMid],
+            borderRadius: 5
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { min: 50, max: 100, grid: { color: gridCol } },
+            y: { grid: { display: false } }
+          }
+        }
+      }));
+
+      chartInstances.push(new Chart(document.getElementById('timePieChart'), {
+        type: 'polarArea',
+        data: {
+          labels: ['시스템·BM 문서 (30%)', '엔진 구현 (25%)', '코드 대조 QA (25%)', '기업·CSTS 학습 (20%)'],
+          datasets: [{
+            data: [30, 25, 25, 20],
+            backgroundColor: [
+              isDark ? 'rgba(88,166,255,0.75)' : 'rgba(37,99,235,0.82)',
+              isDark ? 'rgba(45,212,191,0.7)' : 'rgba(15,118,110,0.78)',
+              isDark ? 'rgba(148,163,184,0.65)' : 'rgba(30,41,59,0.78)',
+              isDark ? 'rgba(100,116,139,0.55)' : 'rgba(100,116,139,0.65)'
+            ],
+            borderWidth: 1,
+            borderColor: isDark ? '#161b22' : '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: { r: { grid: { color: gridCol }, ticks: { display: false } } },
+          plugins: { legend: { position: 'bottom', labels: { boxWidth: 11 } } }
+        }
+      }));
+
+      chartInstances.push(new Chart(document.getElementById('growthLineChart'), {
+        type: 'line',
+        data: {
+          labels: ['고교 기계과', '대학 1~2년', '2026 상반기', '2026 하반기', '2027 목표'],
+          datasets: [
+            {
+              label: '설계·기획 역량(자가추이)',
+              data: [45, 65, 82, 92, 98],
+              borderColor: primary,
+              backgroundColor: isDark ? 'rgba(88,166,255,0.14)' : 'rgba(37,99,235,0.1)',
+              fill: true,
+              tension: 0.35
+            },
+            {
+              label: '구현·QA 검증력(자가추이)',
+              data: [40, 58, 85, 95, 98],
+              borderColor: secondary,
+              backgroundColor: isDark ? 'rgba(45,212,191,0.12)' : 'rgba(15,118,110,0.08)',
+              fill: true,
+              tension: 0.35
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { min: 20, max: 100, grid: { color: gridCol } },
+            x: { grid: { display: false } }
+          }
+        }
+      }));
+    }
+
+    initUI();
+    renderAllCharts();
+  </script>
+</body>
+</html>

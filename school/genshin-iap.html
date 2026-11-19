@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>원신(Genshin Impact) IAP 기획서 | 점성술사 모나의 별자리 역행 보험 패스</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%231e1b4b' stroke='%23e3c178' stroke-width='4'/%3E%3Cpolygon points='32,8 39,25 56,32 39,39 32,56 25,39 8,32 25,25' fill='%2338bdf8'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23fde08d'/%3E%3C/svg%3E" />
+  <script src="./assets/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg-deep: #090b16;
+      --bg-panel: rgba(18, 23, 43, 0.9);
+      --bg-card: rgba(26, 32, 58, 0.8);
+      --genshin-gold: #e3c178;
+      --genshin-gold-bright: #fde08d;
+      --mona-purple: #8b5cf6;
+      --mona-hydro: #38bdf8;
+      --emerald: #10b981;
+      --rose: #f43f5e;
+      --text-main: #f8fafc;
+      --text-sub: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-gold: rgba(227, 193, 120, 0.35);
+      --border-hydro: rgba(56, 189, 248, 0.32);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(88, 28, 135, 0.35) 0%, transparent 45%),
+        radial-gradient(circle at 80% 25%, rgba(14, 116, 144, 0.3) 0%, transparent 50%),
+        linear-gradient(180deg, #070913 0%, #0d1224 50%, #080a14 100%);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding-bottom: 64px;
+      overflow-x: hidden;
+    }
+
+    /* 상단 고정 네비게이션 바 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(14px);
+      background: rgba(9, 11, 22, 0.9);
+      border-bottom: 1px solid var(--border-gold);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-emblem {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4f46e5, #06b6d4);
+      border: 2px solid var(--genshin-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 14px rgba(227, 193, 120, 0.45);
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--genshin-gold-bright);
+    }
+
+    .brand-sub {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+
+    .back-btn {
+      text-decoration: none;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(56, 189, 248, 0.2));
+      border: 1px solid var(--border-hydro);
+      color: #a5f3fc;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 7px 14px;
+      border-radius: 999px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .back-btn:hover {
+      background: rgba(56, 189, 248, 0.3);
+      color: #fff;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-sub);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      border-color: var(--genshin-gold);
+      color: var(--genshin-gold-bright);
+      background: rgba(227, 193, 120, 0.14);
+      outline: none;
+    }
+
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 28px 24px 0;
+    }
+
+    /* 히어로 배너 */
+    .hero {
+      position: relative;
+      background: linear-gradient(135deg, rgba(30, 27, 75, 0.92), rgba(15, 23, 42, 0.94));
+      border: 1.5px solid var(--border-gold);
+      border-radius: 24px;
+      padding: 34px 38px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
+      gap: 28px;
+      align-items: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+
+    .hero > * {
+      min-width: 0;
+    }
+
+    .hero-tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .tag {
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(227, 193, 120, 0.16);
+      border: 1px solid var(--border-gold);
+      color: var(--genshin-gold-bright);
+    }
+
+    .tag.hydro {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--border-hydro);
+      color: #7dd3fc;
+    }
+
+    .tag.purple {
+      background: rgba(139, 92, 246, 0.18);
+      border-color: rgba(139, 92, 246, 0.45);
+      color: #ddd6fe;
+    }
+
+    .hero h1 {
+      font-size: 2.05rem;
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #ffffff, #fde08d, #7dd3fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      word-break: keep-all;
+    }
+
+    .alt-title-note {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .flavor-quote {
+      background: rgba(0, 0, 0, 0.34);
+      border-left: 3px solid var(--genshin-gold);
+      padding: 12px 16px;
+      border-radius: 0 12px 12px 0;
+      font-size: 0.88rem;
+      color: #e2e8f0;
+      font-style: italic;
+      margin-bottom: 18px;
+    }
+
+    .hero-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .meta-box {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 12px;
+      min-width: 0;
+    }
+
+    .meta-label {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+
+    .meta-val {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--genshin-gold-bright);
+      margin-top: 2px;
+      word-break: keep-all;
+    }
+
+    /* 우측 수점반 아스트로 카드 */
+    .astro-card {
+      background: radial-gradient(circle at 50% 35%, rgba(56, 189, 248, 0.25), rgba(15, 23, 42, 0.95));
+      border: 1.5px solid var(--genshin-gold);
+      border-radius: 20px;
+      padding: 22px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 0 35px rgba(56, 189, 248, 0.2);
+      min-width: 0;
+    }
+
+    .astrolabe-svg {
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 12px;
+      animation: spinSlow 24s linear infinite;
+    }
+
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(-360deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .astrolabe-svg {
+        animation: none;
+      }
+      html {
+        scroll-behavior: auto;
+      }
+    }
+
+    .price-badge {
+      display: inline-block;
+      margin-top: 10px;
+      background: linear-gradient(135deg, #d97706, #eab308);
+      color: #090b16;
+      font-weight: 900;
+      font-size: 1.1rem;
+      padding: 8px 22px;
+      border-radius: 999px;
+      box-shadow: 0 4px 16px rgba(234, 179, 8, 0.45);
+    }
+
+    /* 섹션 공통 스타일 */
+    .section {
+      margin-bottom: 36px;
+      scroll-margin-top: 88px;
+    }
+
+    .sec-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-gold);
+    }
+
+    .sec-title {
+      font-size: 1.32rem;
+      font-weight: 800;
+      color: var(--genshin-gold-bright);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      word-break: keep-all;
+    }
+
+    .sec-num {
+      background: var(--genshin-gold);
+      color: #090b16;
+      font-size: 0.82rem;
+      font-weight: 900;
+      padding: 3px 9px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .sec-sub {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      min-width: 0;
+    }
+
+    .panel.gold-border {
+      border-color: var(--border-gold);
+    }
+
+    .panel.hydro-border {
+      border-color: var(--border-hydro);
+    }
+
+    .panel h3 {
+      font-size: 1.02rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      word-break: keep-all;
+    }
+
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.88rem;
+      color: var(--text-sub);
+    }
+
+    .bullet-list li {
+      position: relative;
+      padding-left: 16px;
+      word-break: keep-all;
+    }
+
+    .bullet-list li::before {
+      content: '✦';
+      position: absolute;
+      left: 0;
+      color: var(--genshin-gold);
+      font-size: 0.78rem;
+    }
+
+    /* 플레이어 숙련도 증명 카드 */
+    .proficiency-banner {
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.12), rgba(56, 189, 248, 0.12));
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* 페인포인트 & 모티브 플로우 */
+    .flow-chain {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .flow-step {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 16px;
+      min-width: 0;
+    }
+
+    .flow-step .step-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #38bdf8;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .flow-step h4 {
+      font-size: 0.94rem;
+      margin-bottom: 6px;
+      color: #fff;
+      word-break: keep-all;
+    }
+
+    .flow-step p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      word-break: keep-all;
+    }
+
+    /* 인터랙티브 기원 & 역행 시뮬레이터 */
+    .simulator-wrap {
+      background: linear-gradient(145deg, rgba(17, 24, 39, 0.95), rgba(30, 27, 75, 0.92));
+      border: 2px solid var(--genshin-gold);
+      border-radius: 22px;
+      padding: 26px;
+      box-shadow: 0 0 40px rgba(139, 92, 246, 0.25);
+    }
+
+    .sim-top-hud {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      margin-bottom: 20px;
+    }
+
+    .hud-status {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid var(--border-hydro);
+      padding: 10px 16px;
+      border-radius: 14px;
+      min-width: 0;
+    }
+
+    .pulse-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 12px #10b981;
+      flex-shrink: 0;
+    }
+
+    .currency-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .cur-pill {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--border-gold);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sim-controls {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .sim-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1.5px solid rgba(255, 255, 255, 0.18);
+      color: #fff;
+      padding: 13px 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .sim-btn:hover,
+    .sim-btn:focus-visible,
+    .sim-btn.active {
+      border-color: var(--genshin-gold);
+      background: rgba(227, 193, 120, 0.16);
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    .sim-btn-title {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--genshin-gold-bright);
+      margin-bottom: 4px;
+    }
+
+    .sim-btn-sub {
+      font-size: 0.76rem;
+      color: var(--text-sub);
+    }
+
+    .sim-stage {
+      background: rgba(9, 11, 22, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 18px;
+      padding: 22px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: 22px;
+      align-items: center;
+    }
+
+    .sim-stage > * {
+      min-width: 0;
+    }
+
+    .choice-cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .choice-card {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1.5px solid rgba(56, 189, 248, 0.4);
+      border-radius: 14px;
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+      font-family: inherit;
+      color: inherit;
+      width: 100%;
+    }
+
+    .choice-card:hover,
+    .choice-card:focus-visible,
+    .choice-card.selected {
+      border-color: var(--genshin-gold);
+      background: rgba(139, 92, 246, 0.22);
+      box-shadow: 0 0 18px rgba(227, 193, 120, 0.28);
+      outline: none;
+    }
+
+    .choice-card h5 {
+      font-size: 0.9rem;
+      color: var(--genshin-gold-bright);
+      margin-bottom: 6px;
+    }
+
+    .choice-card p {
+      font-size: 0.78rem;
+      color: var(--text-sub);
+    }
+
+    .pity-meter-box {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-gold);
+      border-radius: 16px;
+      padding: 18px;
+      min-width: 0;
+    }
+
+    .win-badge {
+      display: none;
+      margin-top: 8px;
+      padding: 6px 12px;
+      border-radius: 10px;
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(16, 185, 129, 0.5);
+      color: #6ee7b7;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .pity-bar-bg {
+      width: 100%;
+      height: 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 99px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    .pity-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #8b5cf6, #38bdf8, #fde08d);
+      border-radius: 99px;
+      transition: width 0.5s ease;
+    }
+
+    .reward-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .reward-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 0.78rem;
+      min-width: 0;
+    }
+
+    .reward-chip strong {
+      display: block;
+      font-size: 0.95rem;
+      color: var(--genshin-gold-bright);
+      margin-top: 2px;
+      word-break: keep-all;
+    }
+
+    /* 데이터 테이블 */
+    .table-wrap {
+      overflow-x: auto;
+      width: 100%;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      min-width: 580px;
+    }
+
+    th, td {
+      padding: 11px 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      word-break: keep-all;
+    }
+
+    th {
+      background: rgba(227, 193, 120, 0.12);
+      color: var(--genshin-gold-bright);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .code-badge {
+      font-family: 'Consolas', monospace;
+      background: rgba(139, 92, 246, 0.2);
+      color: #ddd6fe;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      white-space: nowrap;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 295px;
+      width: 100%;
+    }
+
+    .note-box {
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border-left: 3px solid var(--mona-hydro);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      word-break: keep-all;
+    }
+
+    /* 반응형 브레이크포인트 */
+    @media (max-width: 1024px) {
+      .sim-controls {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 960px) {
+      .hero,
+      .grid-3,
+      .grid-2,
+      .sim-stage {
+        grid-template-columns: 1fr;
+      }
+      .flow-chain {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar {
+        padding: 12px 14px;
+      }
+      .container {
+        padding: 18px 14px 0;
+      }
+      .hero {
+        padding: 20px 16px;
+      }
+      .hero h1 {
+        font-size: 1.55rem;
+      }
+      .hero-meta-grid,
+      .flow-chain,
+      .sim-controls,
+      .choice-cards,
+      .reward-grid {
+        grid-template-columns: 1fr;
+      }
+      .panel,
+      .simulator-wrap {
+        padding: 16px;
+      }
+    }
+
+    @media print {
+      body {
+        background: #0b0d17 !important;
+        padding-bottom: 0;
+      }
+      .topbar {
+        position: static;
+      }
+      .panel, .hero, .simulator-wrap {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 상단 고정 헤더 -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-emblem">✦</div>
+      <div>
+        <div class="brand-title">GENSHIN IMPACT — IAP SYSTEM DESIGN</div>
+        <div class="brand-sub">유한대학교 컴퓨터공학과 게임콘텐츠전공 조훈성 (202227069) | 인앱 결제 세부 기획서</div>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <a class="back-btn" href="./index.html">← 취업 대시보드</a>
+      <nav class="nav-links" aria-label="섹션 목차">
+        <a href="#sec-motif">01. 이슈·배경</a>
+        <a href="#sec-spec">02. 메커니즘</a>
+        <a href="#sec-sim">03. 시뮬레이터</a>
+        <a href="#sec-roi">04. ROI·EV</a>
+        <a href="#sec-schema">05. DB 테이블</a>
+        <a href="#sec-qa">06. QA 엣지</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- HERO 배너 -->
+    <section class="hero">
+      <div>
+        <div class="hero-tag-row">
+          <span class="tag">대상 게임: 원신 (Genshin Impact)</span>
+          <span class="tag hydro">모티브: 2024 확률 공개 법제화 &amp; 미니 손해보험</span>
+          <span class="tag purple">캐릭터 이벤트·묶음 기원 전용 (무기 제외)</span>
+        </div>
+        <h1>점성술사 모나의<br>〈별자리 역행 보험 패스〉</h1>
+        <div class="alt-title-note">
+          ※ 대안명: <strong>〈별자리 역행 보증서〉</strong> (실제 금융 보험 상품이 아닌 인게임 기원 마일리지·보증 컨셉)
+        </div>
+        <div class="flavor-quote">
+          "운명의 별자리가 빗나갈까 봐 두려우신가요? 이 위대한 점성술사 아스트로지스트 모나 메기스토스의 수점반(水占盤)이 흩어진 별빛의 궤적을 역행시켜 드리죠! …물론, 계약 보증금은 모라로 선불입니다."
+        </div>
+        <div class="hero-meta-grid">
+          <div class="meta-box">
+            <div class="meta-label">판매 가격 (PC·구글)</div>
+            <div class="meta-val">₩9,900</div>
+          </div>
+          <div class="meta-box">
+            <div class="meta-label">구매 제한</div>
+            <div class="meta-val">버전당 1회 (42일)</div>
+          </div>
+          <div class="meta-box">
+            <div class="meta-label">픽뚫 시 순증 보전</div>
+            <div class="meta-val">22.75~33.75뽑</div>
+          </div>
+          <div class="meta-box">
+            <div class="meta-label">승리 시 만기 환급</div>
+            <div class="meta-val">8.75뽑 + 축성의 서리</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 우측 수점반 비주얼 카드 -->
+      <div class="astro-card">
+        <svg class="astrolabe-svg" viewBox="0 0 200 200" fill="none" aria-hidden="true">
+          <circle cx="100" cy="100" r="88" stroke="#e3c178" stroke-width="2" stroke-dasharray="6 4"/>
+          <circle cx="100" cy="100" r="68" stroke="#38bdf8" stroke-width="2"/>
+          <polygon points="100,20 122,78 180,100 122,122 100,180 78,122 20,100 78,78" stroke="#e3c178" stroke-width="2" fill="rgba(139,92,246,0.18)"/>
+          <circle cx="100" cy="100" r="18" fill="#38bdf8" stroke="#fff" stroke-width="3"/>
+          <circle cx="100" cy="32" r="5" fill="#fde08d"/>
+          <circle cx="168" cy="100" r="5" fill="#fde08d"/>
+          <circle cx="100" cy="168" r="5" fill="#fde08d"/>
+          <circle cx="32" cy="100" r="5" fill="#fde08d"/>
+        </svg>
+        <div style="font-weight:800; font-size:1.05rem; color:#fff;">모나 × 거상 도리 합작 보증 계약</div>
+        <div style="font-size:0.8rem; color:#94a3b8; margin-top:4px;">가입 즉시 창세의 결정 600개(3.75뽑) + 약한 레진 2개 지급</div>
+        <div class="price-badge">₩ 9,900 / 시즌 패스</div>
+      </div>
+    </section>
+
+    <!-- 01. 기획 배경 & 최근 이슈 모티브 -->
+    <section id="sec-motif" class="section">
+      <div class="sec-header">
+        <div class="sec-title"><span class="sec-num">01</span> 게임 선정 근거 및 최근 이슈 모티브</div>
+        <div class="sec-sub">2024 확률 공개 법제화 × MZ세대 미니 손해보험 트렌드 × 원신 5.0 별빛 포착</div>
+      </div>
+
+      <div class="proficiency-banner">
+        <div>
+          <strong style="color:#6ee7b7; font-size:0.95rem;">🎮 선정 게임 숙련도 근거 (기획자 실전 경험)</strong>
+          <div style="font-size:0.82rem; color:#cbd5e1; margin-top:3px;">
+            《원신 7.0 스네즈나야 4인 TPS 협동 이벤트 기획서 (HYV-GENSHIN-7.0-EVENT-042)》 직접 설계·구현 이력 보유 / 반천장·별빛 포착·성유물 해석기 경제 구조 실측 분석
+          </div>
+        </div>
+        <span class="tag hydro">호요버스 시스템 이해도 검증</span>
+      </div>
+
+      <div class="grid-3">
+        <div class="panel gold-border">
+          <h3>⚖️ 이슈 1: 확률형 아이템 규제와 불운 구제</h3>
+          <ul class="bullet-list">
+            <li><strong>2024년 1월</strong> 공정거래위원회 전자상거래법 과징금(116억 4,200만 원) 처분 및 <strong>2024년 3월 22일</strong> 게임산업법 개정(확률 정보공개 의무화) 시행으로 투명성과 소비자 보호 요구가 급증했습니다.</li>
+            <li>반천장 실패 시 다음 확정 픽업 권한은 남지만, 당장 재투자할 수 있는 부산물은 <strong>주인 없는 스타라이트 10~25개(2~5뽑, 80뽑 대비 2.5~6.25%)</strong>에 그쳐 체감 매몰 손실이 큽니다.</li>
+          </ul>
+        </div>
+
+        <div class="panel hydro-border">
+          <h3>🛡️ 이슈 2: 고물가 시대 '미니 손해보험 &amp; 페이백'</h3>
+          <ul class="bullet-list">
+            <li>항공기 지연 보험·액정 파손 보험처럼 <strong>소액(₩9,900)으로 대형 불운 리스크를 헤지(Hedge)</strong>하는 MZ세대 안전소비 트렌드를 반영했습니다.</li>
+            <li>사고(픽뚫) 시에는 역행 보상을, 무사고(반천장 승리) 시에도 <strong>만기 축하 페이백</strong>을 지급해 어느 결과든 체감 이득을 보장합니다.</li>
+          </ul>
+        </div>
+
+        <div class="panel gold-border">
+          <h3>🌟 이슈 3: 5.0 '별빛 포착' 사각지대와 리스크 헤지 상품 공백</h3>
+          <ul class="bullet-list">
+            <li><strong>2024년 8월</strong> 원신 5.0 '별빛 포착'(통합 승률 55:45) 도입 후에도 단일 반천장에선 약 45~50% 확률로 픽뚫이 발생합니다.</li>
+            <li>상점엔 ₩6,000~₩119,000 깡결정 상품이 있지만 단순 재화 충전뿐입니다. 공월(₩5,900)과 기행(₩12,000) 사이 가격대에 <strong>최초의 가챠 리스크 완충 패스</strong>를 신설합니다.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flow-chain">
+        <div class="flow-step">
+          <div class="step-badge">STEP 01 · 기존 페인포인트</div>
+          <h4>80뽑 저축 후 픽뚫 발생</h4>
+          <p>상시 5성 중복 시 주인 없는 스타라이트 10~25개(2~5뽑)만 즉시 회수</p>
+        </div>
+        <div class="flow-step">
+          <div class="step-badge">STEP 02 · 보험 패스 가입</div>
+          <h4>기원 전 ₩9,900 패스 구매</h4>
+          <p>즉시 창세의 결정 ×600 + 약한 레진 ×2 수령 및 수점반 버프 활성화</p>
+        </div>
+        <div class="flow-step">
+          <div class="step-badge">STEP 03-A · 픽뚫 발생 시</div>
+          <h4>별자리 역행 전환 발동</h4>
+          <p>주인 없는 스타라이트 3배(+20/+50개 순증) + 다음 5성 천장 카운트 +15/+20 단축</p>
+        </div>
+        <div class="flow-step">
+          <div class="step-badge">STEP 03-B · 반천장 승리 시</div>
+          <h4>무사고 만기 환급 발동</h4>
+          <p>뒤얽힌 인연 ×5 + 축성의 서리 ×1 + 픽업 전용 특성·돌파 육성 상자 지급</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02. 세부 아이템 메커니즘 (양방향 Win-Win 구조) -->
+    <section id="sec-spec" class="section">
+      <div class="sec-header">
+        <div class="sec-title"><span class="sec-num">02</span> 아이템 세부 메커니즘 (Dual-Outcome 설계)</div>
+        <div class="sec-sub">기본 지급분과 순수 보험 증분을 명확히 분리한 무손실 하이브리드 패스</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel hydro-border">
+          <h3>🔄 Case A: 반천장 실패 (픽뚫 발생) — 〈별자리 역행 전환〉</h3>
+          <ul class="bullet-list">
+            <li><strong>적용 대상:</strong> 캐릭터 이벤트 기원(1·2) 및 묶음 기원 반천장에서 상시 5성(진, 치치, 각청, 모나, 다이루크, 타이나리, 데히야, 유메미즈키 미즈키)이 등장한 순간. <em>(※ 모나 본인 픽뚫 시 전용 당황 대사 출력)</em></li>
+            <li><strong>[선택 1: 별자리 역행 전환] (1~5돌 중복):</strong>
+              <br>• 상시 5성 중복 별자리 1개 회수 ➔ 주인 없는 스타라이트 <strong>총 30개 지급 (기본 10개 + 보험 순증 +20개 = +4뽑)</strong>
+              <br>• 다음 5성 천장 카운트(확천 상태) <strong>즉시 +15스택 가산</strong> (기대 가치 약 15뽑) + 모나의 위로 상자(농축 레진×3·경험책×30·30만 모라)
+            </li>
+            <li><strong>[선택 1+: 6돌 초과 풀돌 상시 픽뚫 특례]:</strong>
+              <br>• 주인 없는 스타라이트 <strong>총 75개 지급 (기본 25개 + 보험 순증 +50개 = +10뽑)</strong> + 천장 카운트 <strong>+20스택 가산</strong> (가입분 포함 <strong>순증 33.75뽑 / 총수령 38.75뽑</strong>)
+            </li>
+            <li><strong>[미보유 최초 획득 / 별자리 유지]:</strong> 미보유 명함 획득 시 캐릭터는 유지하고 <strong>뒤얽힌 인연×5 + 천장 +10스택</strong> 지급(순증 18.75뽑). 기존 별자리 유지 선택 시 <strong>인연×10 + 농축 레진×2</strong>(순증 13.75뽑) 지급.</li>
+          </ul>
+        </div>
+
+        <div class="panel gold-border">
+          <h3>🎉 Case B: 반천장 승리 (한정 픽업 획득) — 〈무사고 만기 환급〉</h3>
+          <ul class="bullet-list">
+            <li><strong>기획 의도:</strong> 반천장에서 바로 한정 캐릭터를 뽑았을 때도 결제 금액 이상이 환급되도록 손실 회피 장벽을 제거합니다.</li>
+            <li><strong>발동 시점:</strong> 5성 판정이 한정 픽업 캐릭터(50:50 승리 또는 별빛 포착)로 결정된 순간 자동 정산.</li>
+            <li><strong>무사고 만기 환급 보상:</strong>
+              <br>• <strong>뒤얽힌 인연 ×5</strong> (가입 시 600결정과 합산해 <strong>총 8.75뽑 순수 기원</strong>)
+              <br>• <strong>〈축성의 서리〉 ×1</strong>: <strong>성유물 해석기</strong> 핵심 재료 (부위별 필요 수량: 꽃/깃털 1개, 시계 2개, 왕관 3개, 성배 4개 — 1개 지급 시 즉시 꽃·깃털 제작 또는 성배 적립 보탬)
+              <br>• <strong>픽업 5성 맞춤 육성 상자 ×1</strong> (획득 캐릭터의 특성 비전서 ×20 + 필드 보스 돌파 소재 ×12 즉시 지급)
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03. 인터랙티브 기원 & 별자리 역행 보험 시뮬레이터 -->
+    <section id="sec-sim" class="section">
+      <div class="sec-header">
+        <div class="sec-title"><span class="sec-num">03</span> 🎮 인게임 UI/UX &amp; 별자리 역행 인터랙티브 시뮬레이터</div>
+        <div class="sec-sub">DB 분기 4종(최초 명함·1~5돌·풀돌·반천장 승리)과 선택지를 직접 테스트하세요</div>
+      </div>
+
+      <div class="simulator-wrap">
+        <div class="sim-top-hud">
+          <div class="hud-status">
+            <div class="pulse-dot"></div>
+            <div>
+              <div style="font-size:0.88rem; font-weight:800; color:#7dd3fc;">🔮 모나의 역행 수점반: ACTIVE (반천장 보호 대기)</div>
+              <div style="font-size:0.76rem; color:#cbd5e1;">캐릭터 이벤트 기원 (1·2) · 묶음 기원 적용 | 무기 기원 제외</div>
+            </div>
+          </div>
+
+          <div class="currency-bar">
+            <div class="cur-pill">💎 가입 기본 지급: <span style="color:#fde08d;">창세의 결정 ×600 (3.75뽑)</span></div>
+            <div class="cur-pill">🌙 약한 레진: <span style="color:#7dd3fc;">×2</span></div>
+          </div>
+        </div>
+
+        <!-- 시나리오 선택 버튼 4종 -->
+        <div class="sim-controls">
+          <button type="button" class="sim-btn active" onclick="runScenario('c1_loss', this)">
+            <div class="sim-btn-title">A-1: 일반 픽뚫 (치치 3돌)</div>
+            <div class="sim-btn-sub">1~5돌 중복! 별자리 역행 전환</div>
+          </button>
+          <button type="button" class="sim-btn" onclick="runScenario('c6_loss', this)">
+            <div class="sim-btn-title">A-2: 풀돌 초과 (각청 7돌)</div>
+            <div class="sim-btn-sub">이미 6돌 완료! 고인물 최대 구제</div>
+          </button>
+          <button type="button" class="sim-btn" onclick="runScenario('new_loss', this)">
+            <div class="sim-btn-title">A-3: 최초 명함 (타이나리 0돌)</div>
+            <div class="sim-btn-sub">도감 미보유 상시 최초 획득 특례</div>
+          </button>
+          <button type="button" class="sim-btn" onclick="runScenario('win', this)">
+            <div class="sim-btn-title">B: 반천장 승리 (한정 픽업)</div>
+            <div class="sim-btn-sub">50:50 승리! 무사고 만기 환급</div>
+          </button>
+        </div>
+
+        <!-- 시뮬레이터 결과 스테이지 -->
+        <div class="sim-stage">
+          <div>
+            <div id="sim-cutscene-tag" style="font-size:0.78rem; font-weight:800; color:#f43f5e; margin-bottom:4px;">
+              ✨ [특수 컷신 개입: 수점반 별자리 궤적 역행!]
+            </div>
+            <h3 id="sim-headline" style="font-size:1.2rem; font-weight:900; color:#fde08d; margin-bottom:8px; word-break:keep-all;">
+              "운명의 별자리가 빗나갔군요! 수점반으로 궤적을 되돌립니다!"
+            </h3>
+            <p id="sim-desc" style="font-size:0.86rem; color:#cbd5e1; margin-bottom:14px; word-break:keep-all;">
+              픽뚫로 획득한 [치치 · 운명의 자리(3돌) 1개]를 역행 수점반에 투입하여, 주인 없는 스타라이트 총 30개(기본 10개 + 보험 순증 20개)와 다음 5성 천장 카운트 +15스택으로 즉시 전환합니다.
+            </p>
+
+            <div id="sim-choices" class="choice-cards">
+              <button type="button" class="choice-card selected" onclick="selectSubOption('retro', this)">
+                <h5>🔄 선택 1: 별자리 역행 전환 (추천)</h5>
+                <p id="opt1-text">상시 별자리 회수 ➔ 스타라이트 순증 +20개(총 30개) + 천장 +15스택</p>
+              </button>
+              <button type="button" class="choice-card" onclick="selectSubOption('keep', this)">
+                <h5>⭐ 선택 2: 상시 별자리 그대로 유지</h5>
+                <p id="opt2-text">상시 별자리 획득 + 위로금(뒤얽힌 인연 ×10 + 농축 레진 ×2)</p>
+              </button>
+            </div>
+          </div>
+
+          <!-- 우측 실시간 보상 & 천장 게이지 -->
+          <div class="pity-meter-box">
+            <div style="display:flex; justify-content:space-between; gap:8px; font-size:0.84rem; font-weight:800;">
+              <span>다음 5성 천장 카운트</span>
+              <span id="pity-text" style="color:#7dd3fc;">15 / 90 스택 (즉시 +15 단축!)</span>
+            </div>
+            <div id="win-badge" class="win-badge">✨ 픽업 5성 획득 완료 — 천장 카운트 초기화</div>
+            <div class="pity-bar-bg">
+              <div id="pity-fill" class="pity-bar-fill" style="width: 16.7%;"></div>
+            </div>
+
+            <div class="reward-grid">
+              <div class="reward-chip">
+                <span>패스 순증 기원 (총수령)</span>
+                <strong id="rw-pulls">22.75뽑 (총 24.75뽑)</strong>
+              </div>
+              <div class="reward-chip">
+                <span>주인 없는 스타라이트 · 인연</span>
+                <strong id="rw-starlight">총 30개 (+20 순증)</strong>
+              </div>
+              <div class="reward-chip">
+                <span>추가 핵심 보상</span>
+                <strong id="rw-extra">농축 레진 ×3 + 30만 모라</strong>
+              </div>
+              <div class="reward-chip">
+                <span>순수 기원 ROI (종합 ROI)</span>
+                <strong id="rw-roi" style="color:#34d399;">542% (종합 596%)</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04. 정량적 가치 및 ROI 비교 차트 -->
+    <section id="sec-roi" class="section">
+      <div class="sec-header">
+        <div class="sec-title"><span class="sec-num">04</span> 정량적 효율(ROI) · 기대 가치(EV) 분석</div>
+        <div class="sec-sub">순수 기원 효율과 부가 보상 환산 종합 효율을 투명하게 분리 검증</div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:20px;">
+        <div class="panel">
+          <h3>📊 상품별 순수 기원 ROI vs 종합 체감 ROI (트럭=100%)</h3>
+          <div class="chart-container">
+            <canvas id="roiBarChart"></canvas>
+          </div>
+          <div class="note-box">
+            <strong>산출 기준:</strong> 비초회 트럭 단가(₩2,356/뽑) 기준 · 순수 기원은 기본 무료 스타라이트 제외 순증분 · 종합 효율은 레진(60=50원석) 및 축성의 서리(4뽑 상당 추정) 포함
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>📈 픽뚫 손실 복구 &amp; 재도전율 [가상 시뮬레이션 · 풀돌 기준]</h3>
+          <div class="chart-container">
+            <canvas id="retentionCompareChart"></canvas>
+          </div>
+          <div class="note-box">
+            <strong>표기 안내:</strong> 좌측 축(회/스택)과 우측 보조 축(재도전율 %, <strong>가정 시뮬레이션 수치</strong>)을 분리했습니다. 6돌 초과 중복 시 순증 보전(33.75뽑) 기준입니다.
+          </div>
+        </div>
+      </div>
+
+      <!-- EV & 매출 잠식 방어 패널 -->
+      <div class="grid-2" style="margin-bottom:20px;">
+        <div class="panel gold-border">
+          <h3>📐 기대 가치(EV) 산출 — 5.0 '별빛 포착' 통합 승률(55:45) 기준</h3>
+          <ul class="bullet-list">
+            <li><strong>일반 유저 (1~5돌 중복 시):</strong> 0.55×8.75 + 0.45×22.75 = <strong>기대 순증 15.05뽑</strong> (₩658/뽑 · <strong>기대 효율 358%</strong>)</li>
+            <li><strong>장기 풀돌 유저 (6돌 초과 시):</strong> 0.55×8.75 + 0.45×33.75 = <strong>기대 순증 20.00뽑</strong> (₩495/뽑 · <strong>기대 효율 476%</strong>)</li>
+            <li>공월 축복(749%)보다는 낮고 진주 기행 순수 기원(162%)보다 높은 <strong>합리적 기대 구간</strong>을 형성합니다.</li>
+          </ul>
+        </div>
+        <div class="panel hydro-border">
+          <h3>🛡️ 경제 인플레이션 &amp; 트럭 매출 잠식(Cannibalization) 방어</h3>
+          <ul class="bullet-list">
+            <li><strong>버전(42일)당 1회 구매 제한:</strong> 버전 내 다중 픽업 및 무기 기원 적용을 배제해 고과금층의 깡트럭 시장을 침범하지 않습니다.</li>
+            <li><strong>Goal-Gradient 추가 결제 견인:</strong> 픽뚫 후 0스택 이탈 대신 +15~20스택 + 인연 확보 상태에서 잔여 40~55뽑 보충 결제를 유도합니다.</li>
+            <li><strong>밸런스 조정 레버:</strong> 인플레이션 과열 시 풀돌 스타라이트 배율(3배→2배) 또는 스택 가산(+15 상한)으로 즉각 튜닝 가능합니다.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panel table-wrap">
+        <h3>📋 원신 기존 상품 vs 〈별자리 역행 보험 패스〉 정량 비교표 (동일 공식 적용)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>상품명</th>
+              <th>결제 가격</th>
+              <th>순증 기원 (총수령)</th>
+              <th>순수 1뽑 단가</th>
+              <th>순수 기원 효율</th>
+              <th>부가 보상 (가정 환산)</th>
+              <th>종합 체감 효율</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>창세의 결정 트럭 (비초회)</td>
+              <td>₩119,000</td>
+              <td>50.50뽑</td>
+              <td>₩2,356</td>
+              <td>100% (기준선)</td>
+              <td>없음</td>
+              <td>100%</td>
+            </tr>
+            <tr>
+              <td>진주 기행 (50레벨 완주)</td>
+              <td>₩12,000</td>
+              <td>8.25뽑 (4인연+680원석)</td>
+              <td>₩1,455</td>
+              <td><strong>162%</strong></td>
+              <td>축성의 서리×1 + 4성 무기 + 육성재화 (+14.0뽑)</td>
+              <td>437%</td>
+            </tr>
+            <tr>
+              <td>공월 축복 (30일 출석)</td>
+              <td>₩5,900</td>
+              <td>18.75뽑 (3,000원석)</td>
+              <td>₩315</td>
+              <td><strong>749%</strong></td>
+              <td>30일 매일 접속 의무</td>
+              <td>749%</td>
+            </tr>
+            <tr style="background:rgba(16,185,129,0.1);">
+              <td><strong>역행 보험 (Case B: 반천장 승리)</strong></td>
+              <td><strong>₩9,900</strong></td>
+              <td><strong>8.75뽑</strong> (600결정+5인연)</td>
+              <td><strong>₩1,131</strong></td>
+              <td><strong style="color:#34d399;">208%</strong></td>
+              <td>약한 레진×2 + 축성의 서리×1 + 육성상자 (+6.29뽑)</td>
+              <td><strong>358%</strong></td>
+            </tr>
+            <tr>
+              <td><strong>역행 보험 (Case A-Keep: 유지)</strong></td>
+              <td><strong>₩9,900</strong></td>
+              <td><strong>13.75뽑</strong> (총 15.75~18.75)</td>
+              <td><strong>₩720</strong></td>
+              <td><strong>327%</strong></td>
+              <td>상시 별자리 획득 + 약한/농축 레진×2 (+1.25뽑)</td>
+              <td><strong>364%</strong></td>
+            </tr>
+            <tr>
+              <td><strong>역행 보험 (Case A-New: 명함)</strong></td>
+              <td><strong>₩9,900</strong></td>
+              <td><strong>18.75뽑</strong> (결정+5인연+10스택)</td>
+              <td><strong>₩528</strong></td>
+              <td><strong>446%</strong></td>
+              <td>신규 상시 도감 + 약한/농축 레진 (+1.56뽑)</td>
+              <td><strong>484%</strong></td>
+            </tr>
+            <tr style="background:rgba(139,92,246,0.14);">
+              <td><strong>역행 보험 (Case A: 1~5돌 역행)</strong></td>
+              <td><strong>₩9,900</strong></td>
+              <td><strong>22.75뽑</strong> (총수령 24.75)</td>
+              <td><strong>₩435</strong></td>
+              <td><strong style="color:#c4b5fd;">542%</strong> *(589%)*</td>
+              <td>약한·농축 레진 + 30만 모라·경험책 (+2.29뽑)</td>
+              <td><strong>596%</strong></td>
+            </tr>
+            <tr style="background:rgba(244,63,94,0.14);">
+              <td><strong>역행 보험 (Case A+: 풀돌 역행)</strong></td>
+              <td><strong>₩9,900</strong></td>
+              <td><strong>33.75뽑</strong> (총수령 38.75)</td>
+              <td><strong>₩293</strong></td>
+              <td><strong style="color:#fde08d;">803%</strong> *(922%)*</td>
+              <td>약한·농축 레진 + 50만 모라·경험책 (+2.78뽑)</td>
+              <td><strong>870%</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 05. 인게임 데이터베이스 테이블 명세 -->
+    <section id="sec-schema" class="section">
+      <div class="sec-header">
+        <div class="sec-title"><span class="sec-num">05</span> 서버·클라이언트 데이터 테이블 명세 (Data Schema)</div>
+        <div class="sec-sub">MD 기획서와 100% 동기화된 마스터·분기 테이블 파라미터 규격</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel table-wrap">
+          <h3>🗄️ 상품 마스터 테이블 (<span class="code-badge">Shop_IAP_Insurance_Config</span>)</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>컬럼명 (Field)</th>
+                <th>타입</th>
+                <th>설정값 (Value)</th>
+                <th>설명</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="code-badge">item_id</span></td>
+                <td>INT</td>
+                <td>409001</td>
+                <td>별자리 역행 보험 패스 고유 ID</td>
+              </tr>
+              <tr>
+                <td><span class="code-badge">product_sku</span></td>
+                <td>STRING</td>
+                <td>genshin_iap_mona_retro_pass_9900</td>
+                <td>스토어 영수증 검증 통합 SKU</td>
+              </tr>
+              <tr>
+                <td><span class="code-badge">price_krw</span></td>
+                <td>INT</td>
+                <td>9900</td>
+                <td>PC·Google Play 정가 ($6.99 / ¥1,000~1,100)</td>
+              </tr>
+              <tr>
+                <td><span class="code-badge">purchase_limit_per_ver</span></td>
+                <td>INT</td>
+                <td>1</td>
+                <td>버전(42일)당 계정 1회 구매 제한</td>
+              </tr>
+              <tr>
+                <td><span class="code-badge">min_adventure_rank</span></td>
+                <td>INT</td>
+                <td>18</td>
+                <td>프롤로그 마신 임무 완료 후 해금</td>
+              </tr>
+              <tr>
+                <td><span class="code-badge">instant_genesis_crystal</span></td>
+                <td>INT</td>
+                <td>600</td>
+                <td>구매 즉시 창세의 결정 600개 (3.75뽑)</td>
+              </tr>
+              <tr>
+                <td><span class="code-badge">instant_fragile_resin</span></td>
+                <td>INT</td>
+                <td>2</td>
+                <td>구매 즉시 약한 레진 2개 지급</td>
+              </tr>
+              <tr>
+                <td><span class="code-badge">carry_over_versions</span></td>
+                <td>INT</td>
+                <td>1</td>
+                <td>미발동 시 다음 버전 자동 이월 허용 횟수</td>
+              </tr>
+              <tr>
+                <td><span class="code-badge">carry_over_max_stack</span></td>
+                <td>INT</td>
+                <td>2</td>
+                <td>이월 포함 최대 중첩 상한 (1회 1개 소모)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel table-wrap">
+          <h3>⚙️ 기원 판정 분기 테이블 (<span class="code-badge">Wish_Retrograde_Trigger_Rule</span>)</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>분기 ID</th>
+                <th>발동 조건</th>
+                <th>스타라이트 (순증)</th>
+                <th>천장 카운트</th>
+                <th>추가 지급 보상</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="code-badge">RETRO_LOSS_NEW</span></td>
+                <td>픽뚫 + 상시 명함 최초 획득</td>
+                <td>0개 (+0)</td>
+                <td>+10 스택</td>
+                <td>뒤얽힌 인연 ×5, 농축 레진 ×3</td>
+              </tr>
+              <tr>
+                <td><span class="code-badge">RETRO_LOSS_C1_C5</span></td>
+                <td>픽뚫 + 1~5돌 중복 (역행 선택)</td>
+                <td><strong>총 30개 (+20)</strong></td>
+                <td><strong>+15 스택</strong></td>
+                <td>농축 레진 ×3, 경험책 ×30, 30만 모라</td>
+              </tr>
+              <tr>
+                <td><span class="code-badge">RETRO_LOSS_C6_OVER</span></td>
+                <td>픽뚫 + 6돌 초과 중복 (역행 선택)</td>
+                <td><strong>총 75개 (+50)</strong></td>
+                <td><strong>+20 스택</strong></td>
+                <td>농축 레진 ×3, 경험책 ×50, 50만 모라</td>
+              </tr>
+              <tr>
+                <td><span class="code-badge">RETRO_LOSS_KEEP</span></td>
+                <td>픽뚫 + [상시 별자리 유지] 선택</td>
+                <td>기본 (10/25개)</td>
+                <td>+0 스택</td>
+                <td>뒤얽힌 인연 ×10, 농축 레진 ×2</td>
+              </tr>
+              <tr>
+                <td><span class="code-badge">RETRO_WIN_PICKUP</span></td>
+                <td>반천장 승리 (한정 픽업 획득)</td>
+                <td>기본 (10/25개)</td>
+                <td>+0 스택</td>
+                <td>뒤얽힌 인연 ×5, 축성의 서리 ×1, 육성상자</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06. QA 엣지 케이스 및 어뷰징 방어 설계 -->
+    <section id="sec-qa" class="section">
+      <div class="sec-header">
+        <div class="sec-title"><span class="sec-num">06</span> QA 엣지 케이스(Edge Cases) 및 어뷰징 방어 로직</div>
+        <div class="sec-sub">결제·기원 트랜잭션 무결성을 보장하는 5대 예외 처리 규격</div>
+      </div>
+
+      <div class="panel table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:85px;">코드</th>
+              <th style="width:270px;">예외 상황 (Edge Case)</th>
+              <th>시스템 방어 및 처리 로직 (Resolution Rule)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="code-badge">E-01</span></td>
+              <td><strong>10연차에서 '픽뚫 상시 5성'과 '한정 5성'이 동시에 등장한 경우</strong></td>
+              <td>배열 순서(Index 0~9)대로 먼저 나온 상시 5성에 역행 보험을 즉시 적용합니다. 뒤이어 나온 한정 5성으로 천장이 리셋된 직후, <strong>새 반천장 사이클의 천장 카운트에 +15~20스택을 가산</strong>하며 2개 중첩 시에도 한 10연차 내 1개만 소모됩니다.</td>
+            </tr>
+            <tr>
+              <td><span class="code-badge">E-02</span></td>
+              <td><strong>역행 선택 모달이 뜬 상태에서 네트워크 단절·강제 종료 발생 시</strong></td>
+              <td>서버 트랜잭션 상태를 <span class="code-badge">PENDING_RETRO_CHOICE</span>로 보존합니다. 재접속 시 선택 모달을 즉시 재호출하며, 72시간 내 미선택 시 유저에게 가장 유리한 <strong>[선택 1: 별자리 역행 전환]을 자동 실행 후 우편 지급</strong>합니다.</td>
+            </tr>
+            <tr>
+              <td><span class="code-badge">E-03</span></td>
+              <td><strong>패스 구매 후 해당 버전(42일) 종료 시까지 5성을 뽑지 못한 경우</strong></td>
+              <td>보험 버프가 소멸하지 않고 <strong>다음 버전으로 1회 자동 이월</strong>됩니다. 이월 패스 보유 중 신규 버전 패스를 구매해 최대 2개까지 중첩 보유 가능하며, 픽뚫 발동 시 선입선출(FIFO)로 1개만 소모됩니다.</td>
+            </tr>
+            <tr>
+              <td><span class="code-badge">E-04</span></td>
+              <td><strong>이미 '확정 픽업(직전 픽뚫 상태)'인 유저가 상품을 구매하는 경우</strong></td>
+              <td>구매 시 안내 팝업을 노출하고, 버프 상태를 <span class="code-badge">STANDBY</span>로 보관했다가 확정 5성 획득 직후 돌아오는 <strong>다음 반천장(50:50) 사이클에 자동 <span class="code-badge">ACTIVE</span> 전환</strong>합니다.</td>
+            </tr>
+            <tr>
+              <td><span class="code-badge">E-05</span></td>
+              <td><strong>보험 혜택 수령 후 스토어 악성 환불(청약철회 어뷰징) 시도 시</strong></td>
+              <td>선지급 창세의 결정(600개) 사용 또는 보험 발동 시 청약철회 불가 플래그를 기록합니다. 강제 환불 발생 시 기존 정책과 동일하게 <strong>지급된 스택·스타라이트 환산 원석만큼 보유 원석을 마이너스(-) 차감</strong>합니다.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // 시뮬레이터 상태 제어
+    let currentScenario = 'c1_loss';
+
+    const scenarioData = {
+      c1_loss: {
+        tag: '✨ [특수 컷신 개입: 수점반 별자리 궤적 역행!]',
+        tagColor: '#f43f5e',
+        headline: '"운명의 별자리가 빗나갔군요! 수점반으로 궤적을 되돌립니다!"',
+        desc: '픽뚫로 획득한 [치치 · 운명의 자리(3돌) 1개]를 역행 수점반에 투입하여, 주인 없는 스타라이트 총 30개(기본 10개 + 보험 순증 20개)와 다음 5성 천장 카운트 +15스택으로 즉시 전환합니다.',
+        showChoices: true,
+        isWin: false,
+        retro: {
+          pityText: '15 / 90 스택 (즉시 +15 단축!)',
+          pityWidth: '16.7%',
+          pulls: '22.75뽑 (총 24.75뽑)',
+          starlight: '총 30개 (+20 순증)',
+          extra: '농축 레진 ×3 + 30만 모라',
+          roi: '542% (종합 596%)'
+        },
+        keep: {
+          pityText: '0 / 90 스택 (별자리 유지)',
+          pityWidth: '0%',
+          pulls: '13.75뽑 (총 15.75뽑)',
+          starlight: '기본 10개 + 위로 인연 ×10',
+          extra: '치치 3돌 획득 + 농축 레진 ×2',
+          roi: '327% (종합 364%)'
+        }
+      },
+      c6_loss: {
+        tag: '🔥 [풀돌 초과 픽뚫 구제: 대점성술 역행 특례 발동!]',
+        tagColor: '#fbbf24',
+        headline: '"이미 완성된 별자리가 또 나왔다고요? 최대 출력으로 역행합니다!"',
+        desc: '이미 6돌(풀돌)인 [각청] 중복 등장! 기존 25개 대신 주인 없는 스타라이트 총 75개(기본 25개 + 보험 순증 50개)와 다음 5성 천장 카운트 +20스택으로 복구합니다.',
+        showChoices: true,
+        isWin: false,
+        retro: {
+          pityText: '20 / 90 스택 (즉시 +20 단축!)',
+          pityWidth: '22.2%',
+          pulls: '33.75뽑 (총 38.75뽑)',
+          starlight: '총 75개 (+50 순증)',
+          extra: '농축 레진 ×3 + 50만 모라',
+          roi: '803% (종합 870%)'
+        },
+        keep: {
+          pityText: '0 / 90 스택 (별자리 유지)',
+          pityWidth: '0%',
+          pulls: '13.75뽑 (총 18.75뽑)',
+          starlight: '기본 25개 + 위로 인연 ×10',
+          extra: '농축 레진 ×2 지급',
+          roi: '327% (총수령 446%)'
+        }
+      },
+      new_loss: {
+        tag: '🌟 [미보유 상시 최초 획득: 도감 해금 + 천장 보정!]',
+        tagColor: '#38bdf8',
+        headline: '"새로운 인연이 찾아왔군요! 캐릭터는 남기고 궤적만 조금 당겨드리죠!"',
+        desc: '아직 보유하지 않았던 [타이나리(명함)]가 최초 등장! 별자리 회수 대신 캐릭터 도감 해금은 그대로 유지하면서 뒤얽힌 인연 ×5 + 천장 카운트 +10스택 + 농축 레진 ×3을 지급합니다.',
+        showChoices: false,
+        isWin: false,
+        retro: {
+          pityText: '10 / 90 스택 (+10스택 보정)',
+          pityWidth: '11.1%',
+          pulls: '18.75뽑 (순증 기준)',
+          starlight: '뒤얽힌 인연 ×5 + 600결정',
+          extra: '타이나리 명함 + 농축 레진 ×3',
+          roi: '446% (종합 484%)'
+        }
+      },
+      win: {
+        tag: '🎉 [반천장 50:50 승리: 무사고 만기 축하금 지급!]',
+        tagColor: '#34d399',
+        headline: '"축하합니다! 별자리가 정확히 맞았으니 무사고 만기 보너스를 드리죠!"',
+        desc: '반천장에서 바로 한정 픽업 5성 획득! 뒤얽힌 인연 ×5 + 성유물 해석기 핵심 재료 〈축성의 서리〉 ×1(꽃/깃털 1·시계 2·성배 4개 소모) + 픽업 전용 육성 상자가 자동 지급됩니다.',
+        showChoices: false,
+        isWin: true,
+        retro: {
+          pityText: '0 / 90 스택 (카운트 초기화)',
+          pityWidth: '0%',
+          pulls: '8.75뽑 + 육성 부스트',
+          starlight: '뒤얽힌 인연 ×5 + 600결정',
+          extra: '축성의 서리 ×1 + 육성 상자',
+          roi: '208% (종합 358%)'
+        }
+      }
+    };
+
+    function runScenario(key, btn) {
+      currentScenario = key;
+      document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      const data = scenarioData[key];
+      const tagEl = document.getElementById('sim-cutscene-tag');
+      tagEl.textContent = data.tag;
+      tagEl.style.color = data.tagColor;
+
+      document.getElementById('sim-headline').textContent = data.headline;
+      document.getElementById('sim-desc').textContent = data.desc;
+      document.getElementById('win-badge').style.display = data.isWin ? 'block' : 'none';
+
+      const choicesBox = document.getElementById('sim-choices');
+      if (data.showChoices) {
+        choicesBox.style.display = 'grid';
+        const cards = choicesBox.querySelectorAll('.choice-card');
+        cards[0].classList.add('selected');
+        cards[1].classList.remove('selected');
+        if (key === 'c6_loss') {
+          document.getElementById('opt1-text').textContent = '초과 별자리 회수 ➔ 스타라이트 순증 +50개(총 75개) + 천장 +20스택';
+        } else {
+          document.getElementById('opt1-text').textContent = '상시 별자리 회수 ➔ 스타라이트 순증 +20개(총 30개) + 천장 +15스택';
+        }
+      } else {
+        choicesBox.style.display = 'none';
+        document.getElementById('opt1-text').textContent = '해당 시나리오는 단일 자동 정산 분기입니다.';
+      }
+
+      applyRewardValues(data.retro);
+    }
+
+    function selectSubOption(opt, cardEl) {
+      document.querySelectorAll('.choice-card').forEach(c => c.classList.remove('selected'));
+      cardEl.classList.add('selected');
+      const data = scenarioData[currentScenario];
+      if (data && data[opt]) {
+        applyRewardValues(data[opt]);
+      }
+    }
+
+    function applyRewardValues(vals) {
+      document.getElementById('pity-text').textContent = vals.pityText;
+      document.getElementById('pity-fill').style.width = vals.pityWidth;
+      document.getElementById('rw-pulls').textContent = vals.pulls;
+      document.getElementById('rw-starlight').textContent = vals.starlight;
+      document.getElementById('rw-extra').textContent = vals.extra;
+      document.getElementById('rw-roi').textContent = vals.roi;
+    }
+
+    // Chart.js 오프라인 안전 가드
+    if (typeof Chart !== 'undefined') {
+      Chart.defaults.color = '#cbd5e1';
+      Chart.defaults.font.family = "'Malgun Gothic', sans-serif";
+
+      new Chart(document.getElementById('roiBarChart'), {
+        type: 'bar',
+        data: {
+          labels: ['트럭(비초회)', '진주 기행', '역행(승리)', '공월 축복', '역행(1~5돌)', '역행(풀돌+)'],
+          datasets: [
+            {
+              label: '순수 기원 효율 (%)',
+              data: [100, 162, 208, 749, 542, 803],
+              backgroundColor: 'rgba(56, 189, 248, 0.82)',
+              borderRadius: 6
+            },
+            {
+              label: '부가 보상 포함 종합 효율 (%)',
+              data: [100, 437, 358, 749, 596, 870],
+              backgroundColor: 'rgba(227, 193, 120, 0.85)',
+              borderRadius: 6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { grid: { color: 'rgba(255,255,255,0.08)' }, title: { display: true, text: '상대 효율 (%)' } },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+
+      new Chart(document.getElementById('retentionCompareChart'), {
+        type: 'bar',
+        data: {
+          labels: ['순증 보전(뽑)', '천장 단축(스택)', '재도전율(%, 가정)'],
+          datasets: [
+            {
+              label: '기존 미가입 (풀돌 픽뚫)',
+              data: [5, 0, null],
+              yAxisID: 'y',
+              backgroundColor: 'rgba(148, 163, 184, 0.45)',
+              borderRadius: 6
+            },
+            {
+              label: '역행 보험 (풀돌 순증)',
+              data: [33.75, 20, null],
+              yAxisID: 'y',
+              backgroundColor: '#38bdf8',
+              borderRadius: 6
+            },
+            {
+              label: '미가입 재도전율(% 가정)',
+              data: [null, null, 28],
+              yAxisID: 'y1',
+              backgroundColor: 'rgba(244, 63, 94, 0.45)',
+              borderRadius: 6
+            },
+            {
+              label: '가입 재도전율(% 가정)',
+              data: [null, null, 84],
+              yAxisID: 'y1',
+              backgroundColor: '#10b981',
+              borderRadius: 6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              type: 'linear',
+              position: 'left',
+              min: 0,
+              max: 45,
+              grid: { color: 'rgba(255,255,255,0.08)' },
+              title: { display: true, text: '뽑기 · 스택 (회)' }
+            },
+            y1: {
+              type: 'linear',
+              position: 'right',
+              min: 0,
+              max: 100,
+              grid: { drawOnChartArea: false },
+              title: { display: true, text: '재도전율 (% · 가정치)' }
+            },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+    } else {
+      document.querySelectorAll('.chart-container').forEach(box => {
+        box.innerHTML = '<div style="padding:20px;color:#fbbf24;font-size:0.85rem;">⚠️ 오프라인 차트 라이브러리(./assets/chart.umd.min.js)를 찾을 수 없습니다. 하단 표에서 전체 정량 수치를 확인하세요.</div>';
+      });
+    }
+  </script>
+</body>
+</html>
