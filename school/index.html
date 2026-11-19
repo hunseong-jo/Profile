@@ -452,7 +452,66 @@
       gap: 8px;
     }
 
-    /* 이치방쿠지 보상 미니게임 */
+    /* 이치방쿠지 보상 미니게임 (전용 미드나잇 네이비 쇼케이스 테마) */
+    .card.kuji-card {
+      background: linear-gradient(145deg, #0f172a 0%, #17233d 55%, #1b2a4a 100%);
+      border: 1.5px solid rgba(245, 158, 11, 0.58);
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.16), inset 0 1px 0 rgba(251, 191, 36, 0.22);
+      color: #f8fafc;
+    }
+
+    body.dark-mode .card.kuji-card {
+      background: linear-gradient(145deg, #16223d 0%, #1d2d50 100%);
+      border-color: rgba(251, 191, 36, 0.62);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(251, 191, 36, 0.25);
+    }
+
+    .kuji-card .card-header {
+      border-bottom-color: rgba(255, 255, 255, 0.14);
+    }
+
+    .kuji-card .card-title {
+      color: #f8fafc;
+    }
+
+    .kuji-card .card-title svg {
+      color: #fbbf24;
+    }
+
+    .kuji-card .card-tag {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.16);
+      color: #e2e8f0;
+    }
+
+    .kuji-card .tool-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.18);
+      color: #e2e8f0;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .kuji-card .tool-btn:hover,
+    .kuji-card .tool-btn:focus-visible,
+    .kuji-card .tool-btn.active {
+      background: rgba(251, 191, 36, 0.2);
+      border-color: #fbbf24;
+      color: #fde68a;
+    }
+
+    .kuji-card .task-input {
+      background: rgba(15, 23, 42, 0.78);
+      border-color: rgba(255, 255, 255, 0.24);
+      color: #f8fafc;
+    }
+
+    .kuji-subhead {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #cbd5e1;
+    }
+
     .kuji-banner {
       display: flex;
       justify-content: space-between;
@@ -461,14 +520,10 @@
       gap: 8px;
       padding: 10px 14px;
       border-radius: 10px;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      color: #f8fafc;
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.18) 0%, rgba(59, 130, 246, 0.16) 100%);
+      border: 1px solid rgba(251, 191, 36, 0.45);
+      color: #fef3c7;
       margin-bottom: 12px;
-    }
-
-    body.dark-mode .kuji-banner {
-      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-      border: 1px solid var(--border-strong);
     }
 
     .kuji-banner-title {
@@ -485,8 +540,8 @@
       font-weight: 800;
       padding: 3px 9px;
       border-radius: 999px;
-      background: rgba(245, 158, 11, 0.2);
-      border: 1px solid rgba(251, 191, 36, 0.55);
+      background: rgba(245, 158, 11, 0.22);
+      border: 1px solid rgba(251, 191, 36, 0.6);
       color: #fde68a;
     }
 
@@ -512,9 +567,9 @@
       gap: 6px;
       padding: 6px 12px;
       border-radius: 999px;
-      background: var(--accent-soft);
-      border: 1px solid var(--accent-border);
-      color: var(--accent-primary);
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid rgba(96, 165, 250, 0.48);
+      color: #bfdbfe;
       font-size: 0.82rem;
       font-weight: 800;
     }
@@ -530,6 +585,13 @@
       font-family: inherit;
       cursor: pointer;
       transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+
+    .kuji-card .primary-btn {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      border-color: #fbbf24;
+      color: #0f172a;
+      font-weight: 900;
     }
 
     .primary-btn:hover:not(:disabled) {
@@ -551,9 +613,9 @@
     .kuji-result {
       padding: 12px 14px;
       border-radius: 12px;
-      background: var(--bg-subtle);
-      border: 1px solid var(--border-hairline);
-      border-left: 4px solid var(--accent-primary);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-left: 4px solid #60a5fa;
       margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
@@ -567,17 +629,10 @@
     }
 
     .kuji-result.rare {
-      background: #fffbeb;
-      border-color: #fcd34d;
-      border-left-color: #d97706;
-      color: #92400e;
-    }
-
-    body.dark-mode .kuji-result.rare {
-      background: rgba(217, 119, 6, 0.14);
-      border-color: rgba(245, 158, 11, 0.4);
-      border-left-color: #f59e0b;
-      color: #fde68a;
+      background: rgba(245, 158, 11, 0.18);
+      border-color: rgba(251, 191, 36, 0.6);
+      border-left-color: #fbbf24;
+      color: #fef3c7;
     }
 
     .kuji-res-left {
@@ -592,8 +647,9 @@
       height: 38px;
       padding: 0 8px;
       border-radius: 9px;
-      background: var(--ink-primary);
-      color: var(--bg-surface);
+      background: rgba(15, 23, 42, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #f8fafc;
       font-size: 0.85rem;
       font-weight: 900;
       display: flex;
@@ -604,31 +660,30 @@
 
     .kuji-res-stamp.gold {
       background: linear-gradient(135deg, #f59e0b, #b45309);
+      border: none;
       color: #ffffff;
     }
 
     .kuji-res-stamp.cobalt {
       background: var(--accent-primary);
+      border: none;
       color: #ffffff;
     }
 
     .kuji-res-stamp.teal {
       background: var(--accent-teal);
+      border: none;
       color: #ffffff;
     }
 
     .kuji-res-title {
       font-size: 0.88rem;
       font-weight: 800;
-      color: var(--ink-primary);
+      color: #f8fafc;
     }
 
     .kuji-result.rare .kuji-res-title {
-      color: #92400e;
-    }
-
-    body.dark-mode .kuji-result.rare .kuji-res-title {
-      color: #fde68a;
+      color: #fef3c7;
     }
 
     .kuji-board {
@@ -637,17 +692,17 @@
       gap: 9px;
       padding: 12px;
       border-radius: 12px;
-      background: var(--bg-muted);
-      border: 1px dashed var(--border-strong);
+      background: rgba(8, 13, 26, 0.52);
+      border: 1.5px dashed rgba(251, 191, 36, 0.38);
     }
 
     .kuji-ticket {
       position: relative;
       padding: 0;
       border-radius: 9px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-strong);
-      color: var(--ink-primary);
+      background: linear-gradient(180deg, #fffdf5 0%, #fef6dd 100%);
+      border: 1px solid #e6cfa0;
+      color: #0f172a;
       font-family: inherit;
       cursor: pointer;
       display: flex;
@@ -655,7 +710,7 @@
       align-items: stretch;
       overflow: hidden;
       min-height: 64px;
-      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.05);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.28);
       transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
     }
 
@@ -666,14 +721,14 @@
       bottom: 0;
       width: 11px;
       height: 11px;
-      background: linear-gradient(135deg, var(--bg-muted) 50%, var(--border-strong) 50%);
+      background: linear-gradient(135deg, #f3e4bc 50%, #c8ac72 50%);
       border-top-left-radius: 4px;
     }
 
     .kuji-ticket:hover:not(:disabled) {
-      border-color: var(--accent-primary);
+      border-color: #fbbf24;
       transform: translateY(-3px);
-      box-shadow: 0 6px 12px rgba(37, 99, 235, 0.14);
+      box-shadow: 0 7px 14px rgba(251, 191, 36, 0.3);
     }
 
     .kuji-ticket:disabled {
@@ -683,10 +738,10 @@
     .kuji-stub {
       font-size: 0.68rem;
       font-weight: 800;
-      color: var(--ink-muted);
-      background: var(--bg-subtle);
+      color: #78350f;
+      background: #f6ebd0;
       padding: 3px 6px;
-      border-bottom: 1.5px dashed var(--border-strong);
+      border-bottom: 1.5px dashed #d4b982;
       text-align: center;
       letter-spacing: 0.3px;
     }
@@ -697,66 +752,56 @@
       align-items: center;
       justify-content: center;
       font-size: 0.82rem;
-      font-weight: 800;
+      font-weight: 900;
       padding: 6px 4px;
-      color: var(--accent-primary);
+      color: #b45309;
     }
 
     .kuji-ticket.opened {
-      background: var(--bg-subtle);
-      border-color: var(--border-hairline);
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.14);
       box-shadow: none;
     }
 
     .kuji-ticket.opened .kuji-stub {
-      border-bottom-color: var(--border-hairline);
-      opacity: 0.7;
+      background: rgba(255, 255, 255, 0.04);
+      color: #94a3b8;
+      border-bottom-color: rgba(255, 255, 255, 0.1);
     }
 
     .kuji-ticket.opened .kuji-flap {
-      color: var(--ink-muted);
+      color: #cbd5e1;
       font-weight: 900;
     }
 
     .kuji-ticket.opened.grade-A {
-      background: #fffbeb;
-      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.24);
+      border-color: #fbbf24;
     }
 
+    .kuji-ticket.opened.grade-A .kuji-stub,
     .kuji-ticket.opened.grade-A .kuji-flap {
-      color: #b45309;
+      color: #fde68a;
     }
 
     .kuji-ticket.opened.grade-B {
-      background: var(--accent-soft);
-      border-color: var(--accent-border);
+      background: rgba(59, 130, 246, 0.24);
+      border-color: #60a5fa;
     }
 
+    .kuji-ticket.opened.grade-B .kuji-stub,
     .kuji-ticket.opened.grade-B .kuji-flap {
-      color: var(--accent-primary);
+      color: #dbeafe;
     }
 
     .kuji-ticket.opened.grade-C {
-      background: #f0fdfa;
-      border-color: #99f6e4;
+      background: rgba(20, 184, 166, 0.22);
+      border-color: #2dd4bf;
     }
 
+    .kuji-ticket.opened.grade-C .kuji-stub,
     .kuji-ticket.opened.grade-C .kuji-flap {
-      color: var(--accent-teal);
-    }
-
-    body.dark-mode .kuji-ticket.opened.grade-A {
-      background: rgba(217, 119, 6, 0.16);
-      border-color: rgba(245, 158, 11, 0.5);
-    }
-
-    body.dark-mode .kuji-ticket.opened.grade-A .kuji-flap {
-      color: #fbbf24;
-    }
-
-    body.dark-mode .kuji-ticket.opened.grade-C {
-      background: rgba(15, 118, 110, 0.18);
-      border-color: rgba(45, 212, 191, 0.45);
+      color: #99f6e4;
     }
 
     .kuji-table {
@@ -773,23 +818,20 @@
       gap: 8px;
       padding: 7px 10px;
       border-radius: 9px;
-      background: var(--bg-subtle);
-      border: 1px solid var(--border-hairline);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #f1f5f9;
       font-size: 0.78rem;
     }
 
     .kuji-prize-row.lastone-row {
-      background: #fffbeb;
-      border-color: #fde68a;
-    }
-
-    body.dark-mode .kuji-prize-row.lastone-row {
-      background: rgba(217, 119, 6, 0.12);
-      border-color: rgba(245, 158, 11, 0.35);
+      background: rgba(245, 158, 11, 0.18);
+      border-color: rgba(251, 191, 36, 0.55);
+      color: #fef3c7;
     }
 
     .kuji-prize-row.soldout {
-      opacity: 0.48;
+      opacity: 0.45;
     }
 
     .grade-badge {
@@ -812,17 +854,17 @@
     }
 
     .grade-badge.cobalt {
-      background: var(--accent-primary);
+      background: #2563eb;
       color: #ffffff;
     }
 
     .grade-badge.teal {
-      background: var(--accent-teal);
+      background: #0f766e;
       color: #ffffff;
     }
 
     .kuji-coupon-box {
-      border-top: 1px solid var(--border-hairline);
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
       padding-top: 10px;
     }
 
@@ -835,6 +877,12 @@
       margin-top: 8px;
     }
 
+    .kuji-empty-msg {
+      font-size: 0.76rem;
+      color: #94a3b8;
+      padding: 6px 2px;
+    }
+
     .coupon-item {
       display: flex;
       align-items: center;
@@ -842,8 +890,9 @@
       gap: 8px;
       padding: 6px 10px;
       border-radius: 8px;
-      background: var(--bg-subtle);
-      border: 1px solid var(--border-hairline);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #f1f5f9;
       font-size: 0.76rem;
     }
 
@@ -1332,7 +1381,7 @@
     </div>
 
     <!-- 취업 보상 이치방쿠지 (제일복권 미니게임) -->
-    <div class="card col-12 sec-core">
+    <div class="card col-12 sec-core kuji-card">
       <div class="card-header">
         <div class="card-title">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M7.5 8a2.5 2.5 0 1 1 5 0M11.5 8a2.5 2.5 0 1 1 5 0"/></svg>
@@ -1374,12 +1423,12 @@
         </div>
 
         <div>
-          <div style="font-size:0.8rem; font-weight:800; color:var(--ink-secondary); margin-bottom:8px;">등급별 잔여 · 실시간 확률</div>
+          <div class="kuji-subhead" style="margin-bottom:8px;">등급별 잔여 · 실시간 확률</div>
           <div class="kuji-table" id="kujiPrizeTable"></div>
 
           <div class="kuji-coupon-box">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-size:0.8rem; font-weight:800; color:var(--ink-secondary);">보유 보상 쿠폰함</span>
+              <span class="kuji-subhead">보유 보상 쿠폰함</span>
               <span class="card-tag" id="kujiCouponCount">0장</span>
             </div>
             <div class="kuji-coupon-list" id="kujiCouponList"></div>
@@ -2022,7 +2071,7 @@
       const activeCoupons = appState.kujiCoupons.filter(c => !c.used).length;
       document.getElementById('kujiCouponCount').textContent = `미사용 ${activeCoupons}장`;
       if (appState.kujiCoupons.length === 0) {
-        couponList.innerHTML = '<div style="font-size:0.76rem;color:var(--ink-muted);padding:6px 2px;">획득한 보상 쿠폰이 없습니다</div>';
+        couponList.innerHTML = '<div class="kuji-empty-msg">획득한 보상 쿠폰이 없습니다</div>';
       } else {
         appState.kujiCoupons.slice(0, 12).forEach((c, idx) => {
           const item = document.createElement('div');
